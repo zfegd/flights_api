@@ -13,6 +13,7 @@ def load_unto_dataframe():
 
 @app.get("/airport/{airport_name}")
 def get_airport_details(airport_name: str):
+    return {"Test":"Reload"}
     df = load_unto_dataframe()
     df["Name"] = df["Name"].str.lower()
     relevant = df[df["Name"].str.contains(airport_name.lower())]
