@@ -19,16 +19,19 @@ def read_root():
 
 @app.get("/df/")
 def test_df():
-    load_unto_dataframe()
-    return {"Data": "World"}
+    df = load_unto_dataframe()
+    size = df.shape[0]
+    return {"Data": size}
 
 @app.get("/airport/{airport_name}")
 def get_airport_details(airport_name: str):
     df = load_unto_dataframe()
-    relevant = df[df["Name"].str.contains(airport_name)]
+    df["Name"] = df["Name"].str.lower()
+    relevant = df[df["Name"].str.contains(airport_name.lower())]
     # convert relevant dataframe to json object
-    return {"Airport":"Checked"}
-    # return None
+    count = relevant.shape[0]
+    return {"Airports":count}
+
 #
 # @app.get("/country/{country_name}")
 # def get_country_airports(country_name: str):
