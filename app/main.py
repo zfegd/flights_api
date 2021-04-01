@@ -7,13 +7,12 @@ app = FastAPI()
 def load_unto_dataframe():
     myheaders = ["AirportID","Name","City","Country","IATA","ICAO","Latitude",
         "Longitude", "Altitude", "Timezone", "DST", "TZ", "Type", "Source"]
-    df = pd.read_csv("data/airports.dat", names=myheaders)
+    df = pd.read_csv("/data/airports.dat", names=myheaders)
     df = df.replace("\\N", "Not Found")
     return df
 
 @app.get("/airport/{airport_name}")
 def get_airport_details(airport_name: str):
-    return {"Test":"Reload"}
     df = load_unto_dataframe()
     df["Name"] = df["Name"].str.lower()
     relevant = df[df["Name"].str.contains(airport_name.lower())]
