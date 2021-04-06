@@ -185,6 +185,101 @@ def get_city_airports(city_name: str = Query(...,
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict('index')
 
+
+@app.get(
+    "/v0.1/IATA/",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airport with the IATA code requested",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
+def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
+                     description="City with the code requested",
+                     example="LHR")):
+    """
+    Find the airport in the database that has your requested IATA code
+
+    For example, you can search for "LHR"
+    """
+    df = load_unto_dataframe()
+    relevant = df[df["IATA"] == iata_code]
+    if relevant.shape[0] is 0:
+        raise HTTPException(status_code=404, detail="No Entries found")
+    return relevant.to_dict('index')
+
+
+@app.get(
+    "/v0.1/ICAO/",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airport with the ICAO code requested",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
+def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
+                     description="City with the code requested",
+                     example="EGLL")):
+    """
+    Find the airport in the database that has your requested ICAO code
+
+    For example, you can search for "EGLL"
+    """
+    df = load_unto_dataframe()
+    relevant = df[df["ICAO"] == icao_code]
+    if relevant.shape[0] is 0:
+        raise HTTPException(status_code=404, detail="No Entries found")
+    return relevant.to_dict('index')
+
+
 # @app.get("/v0.1/timezone/")
 # def get_airports_within_timezone(time_zone : str):
 #     try:
