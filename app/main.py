@@ -219,10 +219,11 @@ def get_city_airports(city_name: str = Query(...,
     },
 )
 def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
-                     description="City with the code requested",
+                     description="Airport with the code requested",
                      example="LHR")):
     """
-    Find the airport in the database that has your requested IATA code
+    Find the airport in the database that has your requested IATA code,
+    excludes unknown or unassigned airports
 
     For example, you can search for "LHR"
     """
@@ -266,15 +267,117 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
     },
 )
 def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
-                     description="City with the code requested",
+                     description="Airport with the code requested",
                      example="EGLL")):
     """
-    Find the airport in the database that has your requested ICAO code
+    Find the airport in the database that has your requested ICAO code,
+    excludes unknown or unassigned airports
+
 
     For example, you can search for "EGLL"
     """
     df = load_unto_dataframe()
     relevant = df[df["ICAO"] == icao_code]
+    if relevant.shape[0] is 0:
+        raise HTTPException(status_code=404, detail="No Entries found")
+    return relevant.to_dict('index')
+
+
+@app.get(
+    "/v0.1/tzformat/",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airports within this tz timezone",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
+def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
+                    description="Airports within timezone requested",
+                    example="Europe/London")):
+    """
+    Find the airport in the database that falls within a timezone, as
+     specified by the tz (Olson) format
+
+
+    For example, you can search for "Europe/London"
+    """
+    df = load_unto_dataframe()
+    relevant = df[df["TZ"] == tz]
+    if relevant.shape[0] is 0:
+        raise HTTPException(status_code=404, detail="No Entries found")
+    return relevant.to_dict('index')
+
+
+@app.get(
+    "/v0.1/dst/",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airports within a dst timezone",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
+def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]$",
+                     description="Airports within timezone requested",
+                     example="Z")):
+    """
+    Find the airport in the database that falls within a timezone, as
+     specified by DST. Possible zones are 'E' for europe, 'A' for North
+     America, 'S' for South America, 'O' for Australia, 'Z' for New Zealand,
+     'N' for none, or 'U' for unknown
+
+
+    For example, you can search for "E"
+    """
+    df = load_unto_dataframe()
+    relevant = df[df["DST"] == dst]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict('index')
