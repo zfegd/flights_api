@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from fastapi import FastAPI, HTTPException, Query
+=======
+from fastapi import FastAPI, HTTPException
+>>>>>>> 5e73a54243f626cd32f9d7e9b8e784e8dd981c0a
 
 import pandas as pd
 
@@ -24,9 +28,17 @@ def get_airport_details(airport_name: str = Query(...,
                         "find, can be its full name or just a phrase",
                                                   example="heathrow")):
     """
+<<<<<<< HEAD
     Find all the airports in the database that contains the name you queried.
 
     For example, you can search for "heathrow" or "london"
+=======
+    Find all the airports in the database that contains the name you queried
+
+    - **airport_name**: the name which you are trying to find in airport(s)'
+     name(s). Can be the full name of the airport, or just a phrase
+     (e.g. London)
+>>>>>>> 5e73a54243f626cd32f9d7e9b8e784e8dd981c0a
     """
     df = load_unto_dataframe()
     df["Name"] = df["Name"].str.lower()
