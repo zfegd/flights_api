@@ -29,8 +29,7 @@ def get_airport_details(airport_name: str = Query(...,
     For example, you can search for "heathrow" or "london"
     """
     df = load_unto_dataframe()
-    df["Name"] = df["Name"].str.lower()
-    relevant = df[df["Name"].str.contains(airport_name.lower())]
+    relevant = df[df["Name"].str.contains(airport_name, case=False)]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
@@ -46,8 +45,9 @@ def get_country_airports(country_name: str = Query(...,
     For example, you can search for "Malaysia"
     """
     df = load_unto_dataframe()
-    df["Country"] = df["Country"].str.lower()
-    relevant = df[df["Country"] == country_name.lower()]
+    df["LowerCountry"] = df["Country"].str.lower()
+    relevant = df[df["LowerCountry"] == country_name.lower()]
+    del relevant["LowerCountry"]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
@@ -63,8 +63,9 @@ def get_city_airports(city_name: str = Query(...,
     For example, you can search for "Manchester"
     """
     df = load_unto_dataframe()
-    df["City"] = df["City"].str.lower()
-    relevant = df[df["City"] == city_name.lower()]
+    df["LowerCity"] = df["City"].str.lower()
+    relevant = df[df["LowerCity"] == city_name.lower()]
+    del relevant["LowerCity"]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
