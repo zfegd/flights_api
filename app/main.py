@@ -13,6 +13,11 @@ def load_unto_dataframe():
 
 @app.get("/v0.1/airport/")
 def get_airport_details(airport_name: str):
+    """
+    Find all the airports in the database that contains the name you have queried
+
+    - **airport_name**: the name which you are trying to find in airport(s)' name(s). Can be the full name of the airport, or just a phrase (e.g. London)
+    """
     df = load_unto_dataframe()
     df["Name"] = df["Name"].str.lower()
     relevant = df[df["Name"].str.contains(airport_name.lower())]
@@ -22,6 +27,11 @@ def get_airport_details(airport_name: str):
 
 @app.get("/v0.1/country/")
 def get_country_airports(country_name: str):
+    """
+    Find all the airports in the database that are in a specific country
+
+    - **country_name**: the country whose airports you want to find
+    """
     df = load_unto_dataframe()
     df["Country"] = df["Country"].str.lower()
     relevant = df[df["Country"] == country_name.lower()]
@@ -31,6 +41,11 @@ def get_country_airports(country_name: str):
 
 @app.get("/v0.1/city/")
 def get_city_airports(city_name: str):
+    """
+    Find all the airports in the database that are in a specific city
+
+    - **city_name**: the city whose airports you want to find
+    """
     df = load_unto_dataframe()
     df["City"] = df["City"].str.lower()
     relevant = df[df["City"] == city_name.lower()]
