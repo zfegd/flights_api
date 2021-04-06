@@ -11,7 +11,7 @@ def load_unto_dataframe():
     df = df.replace("\\N", "Not Found")
     return df
 
-@app.get("/airport/{airport_name}")
+@app.get("/airport/")
 def get_airport_details(airport_name: str):
     df = load_unto_dataframe()
     df["Name"] = df["Name"].str.lower()
@@ -20,7 +20,7 @@ def get_airport_details(airport_name: str):
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
 
-@app.get("/country/{country_name}")
+@app.get("/country/")
 def get_country_airports(country_name: str):
     df = load_unto_dataframe()
     df["Country"] = df["Country"].str.lower()
@@ -29,7 +29,7 @@ def get_country_airports(country_name: str):
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
 
-@app.get("/city/{city_name}")
+@app.get("/city/")
 def get_city_airports(city_name: str):
     df = load_unto_dataframe()
     df["City"] = df["City"].str.lower()
@@ -38,20 +38,20 @@ def get_city_airports(city_name: str):
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
 
-@app.get("/timezone/{time_zone}")
-def get_airports_within_timezone(time_zone : str):
-    try:
-        timezonenum = float(time_zone)
-        if timezonenum < -12 or timezonenum > 14:
-            raise HTTPException(status_code=400, detail="Timezone not valid")
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Timezone not valid")
-    df = load_unto_dataframe()
-    relevant = df[df["Timezone"] == time_zone]
-    if relevant.shape[0] is 0:
-        # throws a 404 because the user can submit a time_zone of "10.9" -> can be refactored into two cases for different error codes
-        raise HTTPException(status_code=404, detail="No Entries found or timezone not valid")
-    return relevant.to_dict()
+# @app.get("/timezone/{time_zone}")
+# def get_airports_within_timezone(time_zone : str):
+#     try:
+#         timezonenum = float(time_zone)
+#         if timezonenum < -12 or timezonenum > 14:
+#             raise HTTPException(status_code=400, detail="Timezone not valid")
+#     except ValueError:
+#         raise HTTPException(status_code=400, detail="Timezone not valid")
+#     df = load_unto_dataframe()
+#     relevant = df[df["Timezone"] == time_zone]
+#     if relevant.shape[0] is 0:
+#         # throws a 404 because the user can submit a time_zone of "10.9" -> can be refactored into two cases for different error codes
+#         raise HTTPException(status_code=404, detail="No Entries found or timezone not valid")
+#     return relevant.to_dict()
 
 # def get_airport_within_geobox():
 #     return None
