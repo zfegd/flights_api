@@ -1,22 +1,31 @@
-from typing import Optional
 from fastapi import FastAPI, HTTPException
+
 import pandas as pd
 
-app = FastAPI()
+app = FastAPI(
+    title="Open Flights Project",
+    description="Basic project to obtain Airport info from OpenFlights",
+    version="0.1",
+)
+
 
 def load_unto_dataframe():
-    myheaders = ["AirportID","Name","City","Country","IATA","ICAO","Latitude",
-        "Longitude", "Altitude", "Timezone", "DST", "TZ", "Type", "Source"]
+    myheaders = ["AirportID", "Name", "City", "Country", "IATA", "ICAO",
+                 "Latitude", "Longitude", "Altitude", "Timezone", "DST", "TZ",
+                 "Type", "Source"]
     df = pd.read_csv("/data/airports.dat", names=myheaders)
     df = df.replace("\\N", "Not Found")
     return df
 
+
 @app.get("/v0.1/airport/")
 def get_airport_details(airport_name: str):
     """
-    Find all the airports in the database that contains the name you have queried
+    Find all the airports in the database that contains the name you queried
 
-    - **airport_name**: the name which you are trying to find in airport(s)' name(s). Can be the full name of the airport, or just a phrase (e.g. London)
+    - **airport_name**: the name which you are trying to find in airport(s)'
+     name(s). Can be the full name of the airport, or just a phrase
+     (e.g. London)
     """
     df = load_unto_dataframe()
     df["Name"] = df["Name"].str.lower()
@@ -24,6 +33,7 @@ def get_airport_details(airport_name: str):
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
+
 
 @app.get("/v0.1/country/")
 def get_country_airports(country_name: str):
@@ -38,6 +48,7 @@ def get_country_airports(country_name: str):
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
+
 
 @app.get("/v0.1/city/")
 def get_city_airports(city_name: str):
@@ -64,8 +75,10 @@ def get_city_airports(city_name: str):
 #     df = load_unto_dataframe()
 #     relevant = df[df["Timezone"] == time_zone]
 #     if relevant.shape[0] is 0:
-#         # throws a 404 because the user can submit a time_zone of "10.9" -> can be refactored into two cases for different error codes
-#         raise HTTPException(status_code=404, detail="No Entries found or timezone not valid")
+#         # throws a 404 because the user can submit a time_zone of "10.9"
+#    -> can be refactored into two cases for different error codes
+#         raise HTTPException(status_code=404, detail="No Entries
+#       found or timezone not valid")
 #     return relevant.to_dict()
 
 # def get_airport_within_geobox():
