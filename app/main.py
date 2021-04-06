@@ -376,6 +376,7 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]$",
 
     For example, you can search for "E"
     """
+    # TODO - reformat as a path param instead of query?
     df = load_unto_dataframe()
     relevant = df[df["DST"] == dst]
     if relevant.shape[0] is 0:
@@ -383,23 +384,63 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]$",
     return relevant.to_dict('index')
 
 
-# @app.get("/v0.1/timezone/")
-# def get_airports_within_timezone(time_zone : str):
-#     try:
-#         timezonenum = float(time_zone)
-#         if timezonenum < -12 or timezonenum > 14:
-#             raise HTTPException(status_code=400, detail="Timezone not valid")
-#     except ValueError:
-#         raise HTTPException(status_code=400, detail="Timezone not valid")
-#     df = load_unto_dataframe()
-#     relevant = df[df["Timezone"] == time_zone]
-#     if relevant.shape[0] is 0:
-#         # throws a 404 because the user can submit a time_zone of "10.9"
-#    -> can be refactored into two cases for different error codes
-#         raise HTTPException(status_code=404, detail="No Entries
-#       found or timezone not valid")
-#     return relevant.to_dict()
+@app.get(
+    "/v0.1/utc/",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airports within this UTC offset range",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
+def get_utc_airports(time_zone: str = Query(...,
+                     regex="^-?[0-9]{1,2}(.5|.75)?$",
+                     description="Airports within this UTC offset range",
+                     example="0")):
+    """
+    Find the airport in the database that falls within a timezone, as
+     specified by the offset from UTC. Input should be a decimal offset,
+     with no need for "+" in positive offsets, and ":" not being used either
+
+
+    For example, you can search for "0", "-11", "14", "5.75", or "3.5"
+    """
+    df = load_unto_dataframe()
+    timezonenum = float(time_zone)
+    if timezonenum < -12 or timezonenum > 14:
+        raise HTTPException(status_code=400, detail="Timezone not valid")
+    relevant = df[df["Timezone"] == time_zone]
+    if relevant.shape[0] is 0:
+        raise HTTPException(status_code=404,
+                            detail="No Entries found or timezone not valid")
+    return relevant.to_dict('index')
+
 
 # def get_airport_within_geobox():
 #     return None
 #
+
+# def get_possible_destinations()
