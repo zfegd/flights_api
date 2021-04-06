@@ -18,7 +18,7 @@ def get_airport_details(airport_name: str):
     relevant = df[df["Name"].str.contains(airport_name.lower())]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_json()
+    return relevant.to_dict()
 
 @app.get("/country/{country_name}")
 def get_country_airports(country_name: str):
@@ -27,7 +27,7 @@ def get_country_airports(country_name: str):
     relevant = df[df["Country"] == country_name.lower()]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_json()
+    return relevant.to_dict()
 
 @app.get("/city/{city_name}")
 def get_city_airports(city_name: str):
@@ -36,7 +36,7 @@ def get_city_airports(city_name: str):
     relevant = df[df["City"] == city_name.lower()]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_json()
+    return relevant.to_dict()
 
 @app.get("/timezone/{time_zone}")
 def get_airports_within_timezone(time_zone : str):
@@ -51,7 +51,7 @@ def get_airports_within_timezone(time_zone : str):
     if relevant.shape[0] is 0:
         # throws a 404 because the user can submit a time_zone of "10.9" -> can be refactored into two cases for different error codes
         raise HTTPException(status_code=404, detail="No Entries found or timezone not valid")
-    return relevant.to_json()
+    return relevant.to_dict()
 
 # def get_airport_within_geobox():
 #     return None
