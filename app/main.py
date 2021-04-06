@@ -27,6 +27,10 @@ class Airport(BaseModel):
     Source: str
 
 
+class Message(BaseModel):
+    message: str
+
+
 def load_unto_dataframe():
     myheaders = ["AirportID", "Name", "City", "Country", "IATA", "ICAO",
                  "Latitude", "Longitude", "Altitude", "Timezone", "DST", "TZ",
@@ -36,16 +40,46 @@ def load_unto_dataframe():
     return df
 
 
-# @app.get("/v0.1/airport")
-@app.get("/v0.1/airport", response_model=Dict[str, Airport])
+@app.get(
+    "/v0.1/airport",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airports found containing requested name",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
 def get_airport_details(airport_name: str = Query(...,
                         description="Name of the airport you are trying to " +
                         "find, can be its full name or just a phrase",
-                                                  example="heathrow")):
+                                                  example="Heathrow")):
     """
     Find all the airports in the database that contains the name you queried.
 
-    For example, you can search for "heathrow" or "london"
+    For example, you can search for "Heathrow" or "London"
     """
     df = load_unto_dataframe()
     relevant = df[df["Name"].str.contains(airport_name, case=False)]
@@ -54,10 +88,41 @@ def get_airport_details(airport_name: str = Query(...,
     return relevant.to_dict('index')
 
 
-@app.get("/v0.1/country/")
+@app.get(
+    "/v0.1/country/",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airports found in the country requested",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
 def get_country_airports(country_name: str = Query(...,
                          description="Country whose airports you want " +
-                         "to find", example="malaysia")):
+                         "to find", example="Malaysia")):
     """
     Find all the airports in the database that are in a specific country
 
@@ -72,10 +137,41 @@ def get_country_airports(country_name: str = Query(...,
     return relevant.to_dict('index')
 
 
-@app.get("/v0.1/city/")
+@app.get(
+    "/v0.1/city/",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airports found in the city requested",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
 def get_city_airports(city_name: str = Query(...,
                       description="City whose airports you want " +
-                      "to find", example="manchester")):
+                      "to find", example="Manchester")):
     """
     Find all the airports in the database that are in a specific city
 
