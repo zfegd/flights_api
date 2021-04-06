@@ -32,7 +32,7 @@ def get_airport_details(airport_name: str = Query(...,
     relevant = df[df["Name"].str.contains(airport_name, case=False)]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict()
+    return relevant.to_dict('index')
 
 
 @app.get("/v0.1/country/")
@@ -50,7 +50,7 @@ def get_country_airports(country_name: str = Query(...,
     del relevant["LowerCountry"]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict()
+    return relevant.to_dict('index')
 
 
 @app.get("/v0.1/city/")
@@ -68,7 +68,7 @@ def get_city_airports(city_name: str = Query(...,
     del relevant["LowerCity"]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict()
+    return relevant.to_dict('index')
 
 # @app.get("/v0.1/timezone/")
 # def get_airports_within_timezone(time_zone : str):
