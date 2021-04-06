@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Query
-
+from pydantic import BaseModel
+from typing import Dict
 import pandas as pd
 
 app = FastAPI(
@@ -7,6 +8,23 @@ app = FastAPI(
     description="Basic project to obtain Airport info from OpenFlights",
     version="0.1",
 )
+
+
+class Airport(BaseModel):
+    AirportID: int
+    Name: str
+    City: str
+    Country: str
+    IATA: str
+    ICAO: str
+    Latitude: float
+    Longitude: float
+    Altitude: int
+    Timezone: str
+    DST: str
+    TZ: str
+    Type: str
+    Source: str
 
 
 def load_unto_dataframe():
@@ -18,7 +36,8 @@ def load_unto_dataframe():
     return df
 
 
-@app.get("/v0.1/airport/")
+# @app.get("/v0.1/airport")
+@app.get("/v0.1/airport", response_model=Dict[str, Airport])
 def get_airport_details(airport_name: str = Query(...,
                         description="Name of the airport you are trying to " +
                         "find, can be its full name or just a phrase",
