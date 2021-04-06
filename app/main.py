@@ -11,7 +11,7 @@ def load_unto_dataframe():
     df = df.replace("\\N", "Not Found")
     return df
 
-@app.get("/airport/")
+@app.get("/v0.1/airport/")
 def get_airport_details(airport_name: str):
     df = load_unto_dataframe()
     df["Name"] = df["Name"].str.lower()
@@ -20,7 +20,7 @@ def get_airport_details(airport_name: str):
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
 
-@app.get("/country/")
+@app.get("/v0.1/country/")
 def get_country_airports(country_name: str):
     df = load_unto_dataframe()
     df["Country"] = df["Country"].str.lower()
@@ -29,7 +29,7 @@ def get_country_airports(country_name: str):
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
 
-@app.get("/city/")
+@app.get("/v0.1/city/")
 def get_city_airports(city_name: str):
     df = load_unto_dataframe()
     df["City"] = df["City"].str.lower()
@@ -38,7 +38,7 @@ def get_city_airports(city_name: str):
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict()
 
-# @app.get("/timezone/{time_zone}")
+# @app.get("/v0.1/timezone/")
 # def get_airports_within_timezone(time_zone : str):
 #     try:
 #         timezonenum = float(time_zone)
