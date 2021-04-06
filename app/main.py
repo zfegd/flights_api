@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 
 import pandas as pd
 
@@ -19,13 +19,14 @@ def load_unto_dataframe():
 
 
 @app.get("/v0.1/airport/")
-def get_airport_details(airport_name: str):
+def get_airport_details(airport_name: str = Query(...,
+                        description="Name of the airport you are trying to " +
+                        "find, can be its full name or just a phrase",
+                                                  example="heathrow")):
     """
-    Find all the airports in the database that contains the name you queried
+    Find all the airports in the database that contains the name you queried.
 
-    - **airport_name**: the name which you are trying to find in airport(s)'
-     name(s). Can be the full name of the airport, or just a phrase
-     (e.g. London)
+    For example, you can search for "heathrow" or "london"
     """
     df = load_unto_dataframe()
     df["Name"] = df["Name"].str.lower()
@@ -36,11 +37,13 @@ def get_airport_details(airport_name: str):
 
 
 @app.get("/v0.1/country/")
-def get_country_airports(country_name: str):
+def get_country_airports(country_name: str = Query(...,
+                         description="Country whose airports you want " +
+                         "to find", example="malaysia")):
     """
     Find all the airports in the database that are in a specific country
 
-    - **country_name**: the country whose airports you want to find
+    For example, you can search for "Malaysia"
     """
     df = load_unto_dataframe()
     df["Country"] = df["Country"].str.lower()
@@ -51,11 +54,13 @@ def get_country_airports(country_name: str):
 
 
 @app.get("/v0.1/city/")
-def get_city_airports(city_name: str):
+def get_city_airports(city_name: str = Query(...,
+                      description="City whose airports you want " +
+                      "to find", example="manchester")):
     """
     Find all the airports in the database that are in a specific city
 
-    - **city_name**: the city whose airports you want to find
+    For example, you can search for "Manchester"
     """
     df = load_unto_dataframe()
     df["City"] = df["City"].str.lower()
