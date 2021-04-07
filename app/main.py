@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Dict
 import pandas as pd
 
+
 app = FastAPI(
     title="Open Flights Project",
     description="Basic project to obtain Airport info from OpenFlights",
@@ -82,6 +83,7 @@ def get_airport_details(airport_name: str = Query(...,
     For example, you can search for "Heathrow" or "London"
     """
     df = load_unto_dataframe()
+    # TODO - sanitise input to prevent regex
     relevant = df[df["Name"].str.contains(airport_name, case=False)]
     if relevant.shape[0] is 0:
         raise HTTPException(status_code=404, detail="No Entries found")
