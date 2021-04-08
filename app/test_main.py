@@ -15,24 +15,54 @@ def test_get_valid_airport():
     assert len(response.json()) == 1
 
 
-# def test_get_airport_randomcaps():
-#     response = client.get("/v0.1/airport?airport_name=hEatHrOw")
-#     assert response.status_code == 200
-#     assert len(response.json()) == 1
-#
-#
-# def test_get_airport_special():
-#     response = client.get("/v0.1/airport?airport_name=Biała")
-#     assert response.status_code == 200
-#     assert len(response.json()) == 1
+def test_get_airport_randomcaps():
+    response = client.get("/v0.1/airport?airport_name=hEatHrOw")
+    assert response.status_code == 200
+    assert len(response.json()) == 1
 
 
-# def test_get_airport_fail():
-#     response = client.get("/airport/kjsjdks")
-#     assert response.status_code == 404
-#
-# test [&], &, multi words, empty query
-#
+def test_get_airport_special():
+    response = client.get("/v0.1/airport?airport_name=Biała")
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+
+
+def test_get_airport_no_entries():
+    response = client.get("/airport/kjsjdks")
+    assert response.status_code == 404
+
+
+def test_get_airport_sanitised_regex():
+    response = client.get("/v0.1/airport?airport_name=%5B%26%5D")
+    assert response.status_code == 404
+
+
+def test_get_airport_sanitised_regex_two():
+    response = client.get("/v0.1/airport?airport_name=%5Ba-zA-Z%5D")
+    assert response.status_code == 404
+
+
+def test_get_airport_valid_ampersand():
+    response = client.get("/v0.1/airport?airport_name=%26")
+    assert response.status_code == 200
+
+
+def test_get_airport_empty_query():
+    response = client.get("/v0.1/airport?airport_name=")
+    assert response.status_code == 200
+    assert len(response.json()) == 7698
+
+
+def test_get_airport_no_query():
+    response = client.get("/v0.1/airport?")
+    assert response.status_code == 422
+
+
+def test_get_airport_multiwords():
+    response = client.get("/v0.1/airport?airport_name=city%20airport")
+    assert response.status_code == 200
+
+
 # ## Get by Country Tests ##
 #
 # def test_get_country_airport():
