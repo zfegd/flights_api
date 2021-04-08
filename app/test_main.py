@@ -285,9 +285,45 @@ def test_get_tz_no_query():
     assert response.status_code == 422
 
 
-# get dst tests
-# tests - pass x7, regexfail char, regexfail length, regexfail multi,
-# empty query, no query
+# Get dst Tests
+
+
+def test_get_all_valid_dst():
+    validzones = ["E", "A", "S", "O", "Z", "N", "U"]
+    for zone in validzones:
+        response = client.get("/v0.1/dst?dst=" + zone)
+        assert response.status_code == 200
+
+
+def test_get_dst_regex_wrong_char():
+    response = client.get("/v0.1/dst?dst=C")
+    assert response.status_code == 422
+
+
+def test_get_dst_regex_wrong_caps():
+    response = client.get("/v0.1/dst?dst=e")
+    assert response.status_code == 422
+
+
+def test_get_dst_regex_wrong_len():
+    response = client.get("/v0.1/dst?dst=NO")
+    assert response.status_code == 422
+
+
+def test_get_dst_regex_multifail():
+    response = client.get("/v0.1/dst?dst=Ez1")
+    assert response.status_code == 422
+
+
+def test_get_dst_empty_query():
+    response = client.get("/v0.1/dst?dst=")
+    assert response.status_code == 422
+
+
+def test_get_dst_no_query():
+    response = client.get("/v0.1/dst?")
+    assert response.status_code == 422
+
 
 # get utc tests
 # pass neg singledigit, pass neg doubledigit, pass positive singledigit,
