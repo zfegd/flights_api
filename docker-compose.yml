@@ -5,3 +5,6 @@ services:
     ports:
       - "80:80"
     container_name: "testcontainer"
+    volumes:
+      - ./:/app
+    entrypoint: /start-reload.sh
