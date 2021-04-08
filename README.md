@@ -49,6 +49,12 @@ An example would be:
 docker run -dp 80:80 --name testcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage /start-reload.sh
 ```
 
-Now, every change you make will be automatically updated in browser without needing to create a new container each time.
+Now, every change you make will be automatically updated in browser without needing to create a new container each time.  
+
+If you wish to view the logs, you can use:
+
+```
+docker logs -f testcontainer
+```
 
 ## Testing
