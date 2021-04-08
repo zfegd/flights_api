@@ -235,9 +235,54 @@ def test_get_icao_no_query():
     response = client.get("/v0.1/ICAO?")
     assert response.status_code == 422
 
-# get tz tests
-# tests - pass defaultformat, pass formatnohypen, pass with number,
-# pass w underscore, invalid timezone, regexfail chars, empty query, no query,
+
+# Get TZ Tests
+# tests - empty query, no query,
+
+
+def test_get_tz_hyphenformat():
+    response = client.get("/v0.1/tzformat?tz=Asia/Ulaanbaatar")
+    assert response.status_code == 200
+
+
+def test_get_tz_with_underscore():
+    response = client.get("/v0.1/tzformat?tz=Asia/Phnom_Penh")
+    assert response.status_code == 200
+
+
+def test_get_tz_valid_but_no_entry():
+    response = client.get("/v0.1/tzformat?tz=Etc/GMT")
+    assert response.status_code == 404
+
+
+def test_get_tz_invalid_timezone():
+    response = client.get("/v0.1/tzformat?tz=Asia/Gangnam")
+    assert response.status_code == 404
+
+
+def test_get_tz_uncapped():
+    response = client.get("/v0.1/tzformat?tz=asia/ulaanbaatar")
+    assert response.status_code == 404
+
+
+def test_get_tz_deprecated():
+    response = client.get("/v0.1/tzformat?tz=Australia/Canberra")
+    assert response.status_code == 404
+
+
+def test_get_tz_regex_fail():
+    response = client.get("/v0.1/tzformat?tz=America/Antigua%20%26%20Barbuda")
+    assert response.status_code == 422
+
+
+def test_get_tz_empty_query():
+    response = client.get("/v0.1/tzformat?tz=")
+    assert response.status_code == 422
+
+
+def test_get_tz_no_query():
+    response = client.get("/v0.1/tzformat?")
+    assert response.status_code == 422
 
 
 # get dst tests
