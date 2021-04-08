@@ -58,3 +58,15 @@ docker logs -f testcontainer
 ```
 
 ## Testing
+
+Once you have built the image, you can call on the tests with the following command:
+
+```
+docker run -p 80:80 --name testcontainer -v $(pwd):/app testimage pytest
+```
+
+Similarly to above, on Windows you have to replace "$(pwd)" with the absolute path of the directory in quotation marks. An example would be:
+
+```
+docker run -p 80:80 --name testcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage pytest
+```
