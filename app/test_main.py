@@ -62,6 +62,7 @@ def test_get_airport_multiwords():
 
 # Get by Country Tests
 
+
 def test_get_country_airport():
     response = client.get("/v0.1/country?country_name=Singapore")
     assert response.status_code == 200
@@ -101,6 +102,7 @@ def test_get_country_no_query():
 
 
 # Get City Tests
+
 
 def test_get_city_airport():
     response = client.get("/v0.1/city?city_name=London")
@@ -146,15 +148,92 @@ def test_get_city_no_query():
     assert response.status_code == 422
 
 
-# get iata tests
-# tests - pass, noentries, regexfail caps, regexfail chars, regexfail length,
-# regex multifailure, empty query, no query
+# Get IATA Tests
 
 
-# get icao tests
-# tests - pass, noentries, regexfail caps, regexfail chars, regexfail length,
-# regex multifailure, empty query, no query
+def test_get_iata_airport():
+    response = client.get("/v0.1/IATA?iata_code=LHR")
+    assert response.status_code == 200
+    assert len(response.json()) == 1
 
+
+def test_get_iata_wrong():
+    response = client.get("/v0.1/IATA?iata_code=ZZZ")
+    assert response.status_code == 404
+
+
+def test_get_iata_regex_noncaps():
+    response = client.get("/v0.1/IATA?iata_code=lhr")
+    assert response.status_code == 422
+
+
+def test_get_iata_regex_length_short():
+    response = client.get("/v0.1/IATA?iata_code=HR")
+    assert response.status_code == 422
+
+
+def test_get_iata_regex_length_long():
+    response = client.get("/v0.1/IATA?iata_code=EGLL")
+    assert response.status_code == 422
+
+
+def test_get_iata_regex_multifailure():
+    response = client.get("/v0.1/IATA?iata_code=l2HR")
+    assert response.status_code == 422
+
+
+def test_get_iata_empty_query():
+    response = client.get("/v0.1/IATA?iata_code=")
+    assert response.status_code == 422
+
+
+def test_get_iata_no_query():
+    response = client.get("/v0.1/IATA?")
+    assert response.status_code == 422
+
+
+# Get ICAO Tests
+
+
+def test_get_icao_airport():
+    response = client.get("/v0.1/ICAO?icao_code=EGLL")
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+
+
+def test_get_icao_wrong():
+    response = client.get("/v0.1/ICAO?icao_code=ZZZZ")
+    assert response.status_code == 404
+
+
+def test_get_icao_regex_noncaps():
+    response = client.get("/v0.1/ICAO?icao_code=egll")
+    assert response.status_code == 422
+
+
+def test_get_icao_regex_length_short():
+    response = client.get("/v0.1/ICAO?icao_code=HR")
+    assert response.status_code == 422
+
+
+def test_get_icao_regex_length_long():
+    response = client.get("/v0.1/ICAO?icao_code=EGGZZ")
+    assert response.status_code == 422
+
+
+def test_get_icao_regex_multifailure():
+    response = client.get("/v0.1/ICAO?icao_code=lA2HRs")
+    assert response.status_code == 422
+
+
+def test_get_icao_empty_query():
+    response = client.get("/v0.1/ICAO?icao_code=")
+    assert response.status_code == 422
+
+
+def test_get_icao_no_query():
+    response = client.get("/v0.1/ICAO?")
+    assert response.status_code == 422
 
 # get tz tests
 # tests - pass defaultformat, pass formatnohypen, pass with number,
