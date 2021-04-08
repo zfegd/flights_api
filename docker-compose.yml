@@ -8,3 +8,11 @@ services:
     volumes:
       - ./:/app
     entrypoint: /start-reload.sh
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: foobar
+      MYSQL_DATABASE: airport
+    ports:
+      - "3308:3306"
+    container_name: "openflightsdb"
