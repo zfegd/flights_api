@@ -73,13 +73,17 @@ docker run -p 80:80 --name testcontainer -v "C:\Users\zfegd\example\hereitis":/a
 
 ## Using Docker Compose
 
-With the docker-compose.yml file, we can use docker-compose to handle the processes instead. To handle the build and running process, use :
+With the docker-compose.yml file, we can use docker-compose to handle the processes instead. To faciltate debugging/querying mode vs testing mode, there are 2 docker-compose files included for either purpose. To handle the build and running process, use :
 
 ```
 docker-compose up -d
 ```
 
-Remove the "-d" flag to run in non-detached mode.
+Remove the "-d" flag to run in non-detached mode. This command above defaults to running docker-compose.yml, which contains the code for debugging/querying mode, as it allows live reload. To run the test instead, which is found in docker-compose.test.yml, run the following command:
+
+```
+docker-compose -f docker-compose.test.yml up
+```
 
 To remove the container, use the following command:
 
