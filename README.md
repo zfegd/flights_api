@@ -70,3 +70,22 @@ Similarly to above, on Windows you have to replace "$(pwd)" with the absolute pa
 ```
 docker run -p 80:80 --name testcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage pytest
 ```
+
+## Using Docker Compose
+
+With the docker-compose.yml file, we can use docker-compose to handle the processes instead. To handle the build and running process, use :
+
+```
+docker-compose up -d
+```
+
+Remove the "-d" flag to run in non-detached mode.
+
+To remove the container, use the following command:
+
+```
+docker-compose down
+```
+
+You can use the "--rmi all" or "--rmi local" flag to remove the image as well.
+
