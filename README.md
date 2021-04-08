@@ -49,6 +49,24 @@ An example would be:
 docker run -dp 80:80 --name testcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage /start-reload.sh
 ```
 
-Now, every change you make will be automatically updated in browser without needing to create a new container each time.
+Now, every change you make will be automatically updated in browser without needing to create a new container each time.  
+
+If you wish to view the logs, you can use:
+
+```
+docker logs -f testcontainer
+```
 
 ## Testing
+
+Once you have built the image, you can call on the tests with the following command:
+
+```
+docker run -p 80:80 --name testcontainer -v $(pwd):/app testimage pytest
+```
+
+Similarly to above, on Windows you have to replace "$(pwd)" with the absolute path of the directory in quotation marks. An example would be:
+
+```
+docker run -p 80:80 --name testcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage pytest
+```
