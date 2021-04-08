@@ -8,16 +8,13 @@ client = TestClient(app)
 
 # Get Airport Tests
 
-def test_empty():
-    assert True
+
+def test_get_valid_airport():
+    response = client.get("/v0.1/airport?airport_name=Heathrow")
+    assert response.status_code == 200
+    assert len(response.json()) == 1
 
 
-# def test_get_valid_airport():
-#     response = client.get("/v0.1/airport?airport_name=Heathrow")
-#     assert response.status_code == 200
-#     assert len(response.json()) == 1
-#
-#
 # def test_get_airport_randomcaps():
 #     response = client.get("/v0.1/airport?airport_name=hEatHrOw")
 #     assert response.status_code == 200
