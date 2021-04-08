@@ -1,18 +1,23 @@
 version: "3.8"
 services:
-  app:
-    build: .
-    ports:
-      - "80:80"
-    container_name: "testcontainer"
-    volumes:
-      - ./:/app
-    entrypoint: /start-reload.sh
+  # app:
+  #   build: .
+  #   ports:
+  #     - "80:80"
+  #   container_name: "testcontainer"
+  #   volumes:
+  #     - ./:/app
+  #   entrypoint: /start-reload.sh
   db:
     image: mysql
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql-init-files:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: foobar
-      MYSQL_DATABASE: airport
+      MYSQL_DATABASE: openflights
+      MYSQL_USER: client
+      MYSQL_PASSWORD: apiplease
     ports:
       - "3308:3306"
     container_name: "openflightsdb"
