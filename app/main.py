@@ -367,7 +367,7 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
             },
     },
 )
-def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]$",
+def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
                      description="Airports within timezone requested",
                      example="Z")):
     """
@@ -382,6 +382,7 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]$",
     df = load_unto_dataframe()
     relevant = df[df["DST"] == dst]
     if relevant.shape[0] is 0:
+        # should never enter this branch?
         raise HTTPException(status_code=404, detail="No Entries found")
     return relevant.to_dict('index')
 
