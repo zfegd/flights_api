@@ -17,6 +17,6 @@ CREATE TABLE OpenFlights.Airports(
   Source varchar(255)
 );
 
-LOAD DATA INFILE "../app/data/airports.dat"
+LOAD DATA INFILE "../data/airports.dat"
 INTO TABLE Airports
-FIELDS TERMINATED BY ','
+FIELDS TERMINATED BY ',';
