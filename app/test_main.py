@@ -325,8 +325,89 @@ def test_get_dst_no_query():
     assert response.status_code == 422
 
 
-# get utc tests
-# pass neg singledigit, pass neg doubledigit, pass positive singledigit,
-# pass positive doubledigit, pass 0, pass halfhr, pass 45mins, fail toobig,
-# fail tooneg, nonexistent timezone, pass badregexformats (eg 02),
-# regexfail char, regexfail length, regexfail mix, empty query, no query
+# Get utc Tests
+
+
+def test_get_utc_neg():
+    response = client.get("/v0.1/utc?time_zone=-11")
+    assert response.status_code == 200
+
+
+def test_get_utc_neg_two():
+    response = client.get("/v0.1/utc?time_zone=-5")
+    assert response.status_code == 200
+
+
+def test_get_utc_pos():
+    response = client.get("/v0.1/utc?time_zone=13")
+    assert response.status_code == 200
+
+
+def test_get_utc_pos_two():
+    response = client.get("/v0.1/utc?time_zone=5")
+    assert response.status_code == 200
+
+
+def test_get_utc_neutral():
+    response = client.get("/v0.1/utc?time_zone=0")
+    assert response.status_code == 200
+
+
+def test_get_utc_halfhr():
+    response = client.get("/v0.1/utc?time_zone=3.5")
+    assert response.status_code == 200
+
+
+def test_get_utc_oddity():
+    response = client.get("/v0.1/utc?time_zone=5.75")
+    assert response.status_code == 200
+
+
+def test_get_utc_too_big():
+    response = client.get("/v0.1/utc?time_zone=89")
+    assert response.status_code == 400
+
+
+def test_get_utc_too_small():
+    response = client.get("/v0.1/utc?time_zone=-55")
+    assert response.status_code == 400
+
+
+def test_get_utc_nonexistent():
+    response = client.get("/v0.1/utc?time_zone=-10.75")
+    assert response.status_code == 404
+
+
+def test_get_utc_validbutbad_regexformat():
+    response = client.get("/v0.1/utc?time_zone=02")
+    assert response.status_code == 404
+
+
+def test_get_utc_regex_fail():
+    response = client.get("/v0.1/utc?time_zone=+8")
+    assert response.status_code == 422
+
+
+def test_get_utc_regex_fail_two():
+    response = client.get("/v0.1/utc?time_zone=8:00")
+    assert response.status_code == 422
+
+
+def test_get_utc_regex_fail_three():
+    response = client.get("/v0.1/utc?time_zone=2.00")
+    assert response.status_code == 422
+
+
+def test_get_utc_regex_fail_length():
+    response = client.get("/v0.1/utc?time_zone=111")
+    assert response.status_code == 422
+
+
+def test_get_utc_empty_query():
+    response = client.get("/v0.1/utc?time_zone=")
+    assert response.status_code == 422
+
+
+def test_get_utc_no_query():
+    response = client.get("/v0.1/utc?")
+    assert response.status_code == 422
