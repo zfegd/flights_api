@@ -93,3 +93,20 @@ docker-compose down
 
 You can use the "--rmi all" or "--rmi local" flag to remove the image as well.
 
+# Monitoring and Debugging
+
+When working with this codebase, you may have to monitor the way the containers are operating. You can monitor if the containers are running and their uptime with the command:
+
+```
+docker ps -a
+```
+
+When the containers are running, you can access it with the command:
+
+```
+docker exec -it <container name> bash
+```
+
+This allows you to access the terminal to debug, such as view the directory structure of the container.
+
+When running operations including the mySQL database, it is important to note that schemas can persist across runs if the volume remainds mounted. This may be useful if no changes are made to the database, but not great if changes to the database initialisation have to be made. To replace the volumes with new ones, you can use the -v flag either when running "down" or "up" commands of docker-compose.
