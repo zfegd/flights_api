@@ -2,14 +2,14 @@ version: "3.8"
 volumes:
   db_info:
 services:
-  # app:
-  #   build: .
-  #   ports:
-  #     - "80:80"
-  #   container_name: "testcontainer"
-  #   volumes:
-  #     - ./:/app
-  #   entrypoint: /start-reload.sh
+  app:
+    build: .
+    ports:
+      - "80:80"
+    container_name: "testcontainer"
+    volumes:
+      - ./:/app
+    entrypoint: /start-reload.sh
   db:
     image: mysql
     restart: always

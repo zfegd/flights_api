@@ -42,6 +42,11 @@ def load_unto_dataframe():
     return df
 
 
+@app.get("/v0.1/trial/")
+def get_database_connected(iata: str = Query(..., regex="^[A-Z]{3}$")):
+    return {"Nothing": "Created"}
+
+
 @app.get(
     "/v0.1/airport",
     response_model=Dict[str, Airport],
