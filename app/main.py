@@ -34,6 +34,7 @@ class Message(BaseModel):
     message: str
 
 
+# TODO - REMOVE WHEN NOT NEEDED
 def load_unto_dataframe():
     myheaders = ["AirportID", "Name", "City", "Country", "IATA", "ICAO",
                  "Latitude", "Longitude", "Altitude", "Timezone", "DST", "TZ",
@@ -53,15 +54,13 @@ def open_connection():
     return mydb
 
 
+# TODO - REMOVE WHEN NOT NEEDED
 @app.get("/v0.1/trial/")
 def get_database_connected(iata: str = Query(..., regex="^[A-Z]{3}$")):
     mydb = open_connection()
     mycursor = mydb.cursor()
-
     mycursor.execute("SELECT * FROM Airports where Country=\"Singapore\"")
-
     myresult = mycursor.fetchall()
-
     results = {}
     index = 0
     for result in myresult:
@@ -70,6 +69,7 @@ def get_database_connected(iata: str = Query(..., regex="^[A-Z]{3}$")):
     return results
 
 
+# TODO - change to sql
 @app.get(
     "/v0.1/airport",
     response_model=Dict[str, Airport],
@@ -119,6 +119,7 @@ def get_airport_details(airport_name: str = Query(...,
     return relevant.to_dict('index')
 
 
+# TODO - change to sql
 @app.get(
     "/v0.1/country/",
     response_model=Dict[str, Airport],
@@ -159,15 +160,23 @@ def get_country_airports(country_name: str = Query(...,
 
     For example, you can search for "Malaysia"
     """
-    df = load_unto_dataframe()
-    df["LowerCountry"] = df["Country"].str.lower()
-    relevant = df[df["LowerCountry"] == country_name.lower()]
-    del relevant["LowerCountry"]
-    if relevant.shape[0] is 0:
+    mydb = open_connection()
+    mycursor = mydb.cursor()
+    query = "SELECT * FROM Airports where Country=\"" + country_name + "\""
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    results = {}
+    index = 0
+    if len(myresult) == 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict('index')
+    for result in myresult:
+        results.update({index: result})
+        index = index + 1
+    # return results
+    return {"Code": "Success"}
 
 
+# TODO - change to sql
 @app.get(
     "/v0.1/city/",
     response_model=Dict[str, Airport],
@@ -217,6 +226,7 @@ def get_city_airports(city_name: str = Query(...,
     return relevant.to_dict('index')
 
 
+# TODO - change to sql
 @app.get(
     "/v0.1/IATA/",
     response_model=Dict[str, Airport],
@@ -265,6 +275,7 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
     return relevant.to_dict('index')
 
 
+# TODO - change to sql
 @app.get(
     "/v0.1/ICAO/",
     response_model=Dict[str, Airport],
@@ -314,6 +325,7 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
     return relevant.to_dict('index')
 
 
+# TODO - change to sql
 @app.get(
     "/v0.1/tzformat/",
     response_model=Dict[str, Airport],
@@ -363,6 +375,7 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
     return relevant.to_dict('index')
 
 
+# TODO - change to sql
 @app.get(
     "/v0.1/dst/",
     response_model=Dict[str, Airport],
@@ -415,6 +428,7 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
     return relevant.to_dict('index')
 
 
+# TODO - change to sql
 @app.get(
     "/v0.1/utc/",
     response_model=Dict[str, Airport],
