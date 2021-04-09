@@ -43,15 +43,19 @@ def load_unto_dataframe():
     return df
 
 
-@app.get("/v0.1/trial/")
-def get_database_connected(iata: str = Query(..., regex="^[A-Z]{3}$")):
+def open_connection():
     mydb = mysql.connector.connect(
       host="db",
       user="client",
       password="apiplease",
       database="openflights"
     )
+    return mydb
 
+
+@app.get("/v0.1/trial/")
+def get_database_connected(iata: str = Query(..., regex="^[A-Z]{3}$")):
+    mydb = open_connection()
     mycursor = mydb.cursor()
 
     mycursor.execute("SELECT * FROM Airports where Country=\"Singapore\"")
