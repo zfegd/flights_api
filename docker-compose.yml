@@ -10,8 +10,8 @@ services:
   #   entrypoint: /start-reload.sh
   db:
     image: mysql
+    restart: always
     volumes:
-      - ./mysql-data:/var/lib/mysql
       - ./mysql-init-files:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: foobar
@@ -21,3 +21,4 @@ services:
     ports:
       - "3308:3306"
     container_name: "openflightsdb"
+    command: --secure-file-priv=''
