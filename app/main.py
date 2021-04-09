@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Dict
 import pandas as pd
 import re
+import mysql.connector
 
 
 app = FastAPI(
@@ -44,7 +45,25 @@ def load_unto_dataframe():
 
 @app.get("/v0.1/trial/")
 def get_database_connected(iata: str = Query(..., regex="^[A-Z]{3}$")):
-    return {"Nothing": "Created"}
+    mydb = mysql.connector.connect(
+      host="db",
+      user="client",
+      password="apiplease",
+      database="openflights"
+    )
+
+    mycursor = mydb.cursor()
+
+    mycursor.execute("SELECT * FROM Airports where Country=\"Singapore\"")
+
+    myresult = mycursor.fetchall()
+
+    results = {}
+    index = 0
+    for result in myresult:
+        results.update({index: result})
+        index = index + 1
+    return results
 
 
 @app.get(
