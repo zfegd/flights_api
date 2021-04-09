@@ -1,4 +1,6 @@
 version: "3.8"
+volumes:
+  db_info:
 services:
   # app:
   #   build: .
@@ -12,6 +14,7 @@ services:
     image: mysql
     restart: always
     volumes:
+      - db_info:/var/lib/mysql
       - ./app/data:/data
       - ./mysql-init-files:/docker-entrypoint-initdb.d
     environment:
