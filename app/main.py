@@ -128,7 +128,6 @@ def get_airport_details(airport_name: str = Query(...,
     return relevant.to_dict('index')
 
 
-# TODO - change to sql
 @app.get(
     "/v0.1/country/",
     response_model=Dict[str, Airport],
@@ -161,7 +160,6 @@ def get_airport_details(airport_name: str = Query(...,
             },
     },
 )
-# @app.get("/v0.1/country/")
 def get_country_airports(country_name: str = Query(...,
                          description="Country whose airports you want " +
                          "to find", example="Malaysia")):
@@ -186,7 +184,6 @@ def get_country_airports(country_name: str = Query(...,
     return results
 
 
-# TODO - change to sql
 @app.get(
     "/v0.1/city/",
     response_model=Dict[str, Airport],
@@ -227,13 +224,20 @@ def get_city_airports(city_name: str = Query(...,
 
     For example, you can search for "Manchester"
     """
-    df = load_unto_dataframe()
-    df["LowerCity"] = df["City"].str.lower()
-    relevant = df[df["LowerCity"] == city_name.lower()]
-    del relevant["LowerCity"]
-    if relevant.shape[0] is 0:
+    mydb = open_connection()
+    mycursor = mydb.cursor()
+    query = "SELECT * FROM Airports where City=\"" + city_name + "\""
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    results = {}
+    index = 0
+    if len(myresult) == 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict('index')
+    for result in myresult:
+        dictresult = zip_to_dict(result)
+        results.update({index: dictresult})
+        index = index + 1
+    return results
 
 
 # TODO - change to sql
