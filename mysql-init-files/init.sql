@@ -15,7 +15,7 @@ CREATE TABLE Airports(
   Source varchar(255)
 );
 
-LOAD DATA INFILE "../../../data/airports.dat"
+LOAD DATA INFILE "/data/airports.dat"
 INTO TABLE Airports
 FIELDS TERMINATED BY ','
 OPTIONALLY ENCLOSED BY '"'
