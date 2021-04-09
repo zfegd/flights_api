@@ -240,7 +240,6 @@ def get_city_airports(city_name: str = Query(...,
     return results
 
 
-# TODO - change to sql
 @app.get(
     "/v0.1/IATA/",
     response_model=Dict[str, Airport],
@@ -282,14 +281,22 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
 
     For example, you can search for "LHR"
     """
-    df = load_unto_dataframe()
-    relevant = df[df["IATA"] == iata_code]
-    if relevant.shape[0] is 0:
+    mydb = open_connection()
+    mycursor = mydb.cursor()
+    query = "SELECT * FROM Airports where IATA=\"" + iata_code + "\""
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    results = {}
+    index = 0
+    if len(myresult) == 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict('index')
+    for result in myresult:
+        dictresult = zip_to_dict(result)
+        results.update({index: dictresult})
+        index = index + 1
+    return results
 
 
-# TODO - change to sql
 @app.get(
     "/v0.1/ICAO/",
     response_model=Dict[str, Airport],
@@ -332,11 +339,20 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
 
     For example, you can search for "EGLL"
     """
-    df = load_unto_dataframe()
-    relevant = df[df["ICAO"] == icao_code]
-    if relevant.shape[0] is 0:
+    mydb = open_connection()
+    mycursor = mydb.cursor()
+    query = "SELECT * FROM Airports where ICAO=\"" + icao_code + "\""
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    results = {}
+    index = 0
+    if len(myresult) == 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict('index')
+    for result in myresult:
+        dictresult = zip_to_dict(result)
+        results.update({index: dictresult})
+        index = index + 1
+    return results
 
 
 # TODO - change to sql
