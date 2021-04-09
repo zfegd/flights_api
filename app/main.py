@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Optional
 import pandas as pd
 import re
 import mysql.connector
@@ -18,14 +18,14 @@ class Airport(BaseModel):
     Name: str
     City: str
     Country: str
-    IATA: str
-    ICAO: str
+    IATA: Optional[str] = None
+    ICAO: Optional[str] = None
     Latitude: float
     Longitude: float
     Altitude: int
-    Timezone: str
-    DST: str
-    TZ: str
+    Timezone: Optional[str] = None
+    DST: Optional[str] = None
+    TZ: Optional[str] = None
     Type: str
     Source: str
 
@@ -52,6 +52,15 @@ def open_connection():
       database="openflights"
     )
     return mydb
+
+
+def zip_to_dict(values):
+    keys = ["AirportID", "Name", "City", "Country", "IATA", "ICAO",
+            "Latitude", "Longitude", "Altitude", "Timezone", "DST", "TZ",
+            "Type", "Source"]
+    if len(values) != len(keys):
+        return None
+    return dict(zip(keys, values))
 
 
 # TODO - REMOVE WHEN NOT NEEDED
@@ -120,39 +129,39 @@ def get_airport_details(airport_name: str = Query(...,
 
 
 # TODO - change to sql
-# @app.get(
-#     "/v0.1/country/",
-#     response_model=Dict[str, Airport],
-#     responses={
-#          404: {"model": Message, "description": "No Entries found"},
-#          200: {
-#             "description": "Airports found in the country requested",
-#             "content": {
-#                 "application/json": {
-#                     "example": {
-#                         "502": {
-#                             "AirportID": 507,
-#                             "Name": "London Heathrow Airport",
-#                             "City": "London",
-#                             "Country": "United Kingdom",
-#                             "IATA": "LHR",
-#                             "ICAO": "EGLL",
-#                             "Latitude": 51.4706,
-#                             "Longitude": -0.461941,
-#                             "Altitude": 83,
-#                             "Timezone": "0",
-#                             "DST": "E",
-#                             "TZ": "Europe/London",
-#                             "Type": "airport",
-#                             "Source": "OurAirports"
-#                                 }
-#                                 }
-#                             }
-#                     },
-#             },
-#     },
-# )
-@app.get("/v0.1/country/")
+@app.get(
+    "/v0.1/country/",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airports found in the country requested",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
+# @app.get("/v0.1/country/")
 def get_country_airports(country_name: str = Query(...,
                          description="Country whose airports you want " +
                          "to find", example="Malaysia")):
@@ -171,7 +180,8 @@ def get_country_airports(country_name: str = Query(...,
     if len(myresult) == 0:
         raise HTTPException(status_code=404, detail="No Entries found")
     for result in myresult:
-        results.update({index: result})
+        dictresult = zip_to_dict(result)
+        results.update({index: dictresult})
         index = index + 1
     return results
 
