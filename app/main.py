@@ -120,38 +120,39 @@ def get_airport_details(airport_name: str = Query(...,
 
 
 # TODO - change to sql
-@app.get(
-    "/v0.1/country/",
-    response_model=Dict[str, Airport],
-    responses={
-         404: {"model": Message, "description": "No Entries found"},
-         200: {
-            "description": "Airports found in the country requested",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
-            },
-    },
-)
+# @app.get(
+#     "/v0.1/country/",
+#     response_model=Dict[str, Airport],
+#     responses={
+#          404: {"model": Message, "description": "No Entries found"},
+#          200: {
+#             "description": "Airports found in the country requested",
+#             "content": {
+#                 "application/json": {
+#                     "example": {
+#                         "502": {
+#                             "AirportID": 507,
+#                             "Name": "London Heathrow Airport",
+#                             "City": "London",
+#                             "Country": "United Kingdom",
+#                             "IATA": "LHR",
+#                             "ICAO": "EGLL",
+#                             "Latitude": 51.4706,
+#                             "Longitude": -0.461941,
+#                             "Altitude": 83,
+#                             "Timezone": "0",
+#                             "DST": "E",
+#                             "TZ": "Europe/London",
+#                             "Type": "airport",
+#                             "Source": "OurAirports"
+#                                 }
+#                                 }
+#                             }
+#                     },
+#             },
+#     },
+# )
+@app.get("/v0.1/country/")
 def get_country_airports(country_name: str = Query(...,
                          description="Country whose airports you want " +
                          "to find", example="Malaysia")):
@@ -172,8 +173,7 @@ def get_country_airports(country_name: str = Query(...,
     for result in myresult:
         results.update({index: result})
         index = index + 1
-    # return results
-    return {"Code": "Success"}
+    return results
 
 
 # TODO - change to sql
