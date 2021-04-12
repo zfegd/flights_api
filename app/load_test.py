@@ -1,4 +1,4 @@
-from locust import HttpLocust, TaskSet, task
+from locust import HttpUser, TaskSet, task
 
 
 class UserBehavior(TaskSet):
@@ -20,7 +20,7 @@ class UserBehavior(TaskSet):
         self.client.get("/v0.1/airport?airport_name=")
 
 
-class WebsiteUser(HttpLocust):
+class WebsiteUser(HttpUser):
     task_set = UserBehavior
     host = 'http://127.0.0.1'
     min_wait = 5000

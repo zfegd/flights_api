@@ -3,4 +3,4 @@ pytest==6.2.2
 pydantic==1.8.1
 requests==2.25.1
 mysql-connector-python==8.0.23
-locustio==0.999
+locust==1.4.4
