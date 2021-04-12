@@ -92,6 +92,7 @@ docker-compose down
 ```
 
 You can use the "--rmi all" or "--rmi local" flag to remove the image as well.
+Please remember to fill in the .envtocustomise file with the fields you want to use, as well as renaming it to .env , or calling it with the env-file flag during docker compose
 
 # Monitoring and Debugging
 
