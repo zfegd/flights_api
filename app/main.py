@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from typing import Dict, Optional
-import pandas as pd
 import re
 import mysql.connector
 
