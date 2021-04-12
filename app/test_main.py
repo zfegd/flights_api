@@ -46,8 +46,7 @@ def test_get_airport_valid_ampersand():
 
 def test_get_airport_empty_query():
     response = client.get("/v0.1/airport?airport_name=")
-    assert response.status_code == 200
-    assert len(response.json()) == 7698
+    assert response.status_code == 422
 
 
 def test_get_airport_no_query():
@@ -93,7 +92,7 @@ def test_get_country_regex():
 
 def test_get_country_empty_query():
     response = client.get("/v0.1/country?country_name=")
-    assert response.status_code == 404
+    assert response.status_code == 422
 
 
 def test_get_country_no_query():
@@ -140,7 +139,7 @@ def test_get_city_regex():
 
 def test_get_city_empty_query():
     response = client.get("/v0.1/city?city_name=")
-    assert response.status_code == 404
+    assert response.status_code == 422
 
 
 def test_get_city_no_query():
@@ -262,7 +261,7 @@ def test_get_tz_invalid_timezone():
 
 def test_get_tz_uncapped():
     response = client.get("/v0.1/tzformat?tz=asia/ulaanbaatar")
-    assert response.status_code == 404
+    assert response.status_code == 200
 
 
 def test_get_tz_deprecated():

@@ -85,7 +85,7 @@ def zip_to_dict(values):
             },
     },
 )
-def get_airport_details(airport_name: str = Query(...,
+def get_airport_details(airport_name: str = Query(..., min_length=1,
                         description="Name of the airport you are trying to " +
                         "find, can be its full name or just a phrase",
                                                   example="Heathrow")):
@@ -143,7 +143,7 @@ def get_airport_details(airport_name: str = Query(...,
             },
     },
 )
-def get_country_airports(country_name: str = Query(...,
+def get_country_airports(country_name: str = Query(..., min_length=1,
                          description="Country whose airports you want " +
                          "to find", example="Malaysia")):
     """
@@ -200,7 +200,7 @@ def get_country_airports(country_name: str = Query(...,
             },
     },
 )
-def get_city_airports(city_name: str = Query(...,
+def get_city_airports(city_name: str = Query(..., min_length=1,
                       description="City whose airports you want " +
                       "to find", example="Manchester")):
     """
