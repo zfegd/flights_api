@@ -11,16 +11,9 @@ class MyUser(HttpUser):
         self.client.get("/v0.1/airport?airport_name=Heathrow")
 
     @task
-    def get_airport_no_entries(self):
-        self.client.get("/v0.1/airport?airport_name=kjsjdks")
-
-    @task
     def get_airport_long_result(self):
         self.client.get("/v0.1/airport?airport_name=a")
 
-    @task
-    def get_airport_invalid(self):
-        self.client.get("/v0.1/airport?airport_name=")
 
 
 # class UserBehavior(TaskSet):
