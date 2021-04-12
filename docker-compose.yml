@@ -20,10 +20,10 @@ services:
       - ./app/data:/data
       - ./mysql-init-files:/docker-entrypoint-initdb.d
     environment:
-      MYSQL_ROOT_PASSWORD: foobar
+      MYSQL_ROOT_PASSWORD: ${SQLROOTPASS}
       MYSQL_DATABASE: openflights
-      MYSQL_USER: client
-      MYSQL_PASSWORD: apiplease
+      MYSQL_USER: ${SQLUSER}
+      MYSQL_PASSWORD: ${SQLPASS}
     ports:
       - "3308:3306"
     container_name: "openflightsdb"
