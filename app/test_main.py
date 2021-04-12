@@ -410,3 +410,108 @@ def test_get_utc_empty_query():
 def test_get_utc_no_query():
     response = client.get("/v0.1/utc?")
     assert response.status_code == 422
+
+
+# Geobox tests
+
+
+def test_get_valid_geobox():
+    url = "/v0.1/geobox/?southlat=20&northlat=22&westlon=100&eastlon=140"
+    response = client.get(url)
+    assert response.status_code == 200
+
+
+def test_get_valid_geobox_neg():
+    url = "/v0.1/geobox/?southlat=-60&northlat=-20&westlon=-100&eastlon=-10"
+    response = client.get(url)
+    assert response.status_code == 200
+
+
+def test_get_empty_geobox():
+    url = "/v0.1/geobox/?southlat=20&northlat=22&westlon=28&eastlon=30"
+    response = client.get(url)
+    assert response.status_code == 404
+
+
+def test_get_geobox_invalid_slat_1():
+    url = "/v0.1/geobox/?southlat=220&northlat=22&westlon=28&eastlon=30"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_invalid_slat_2():
+    url = "/v0.1/geobox/?southlat=-220&northlat=22&westlon=28&eastlon=30"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_invalid_nlat_1():
+    url = "/v0.1/geobox/?southlat=20&northlat=220&westlon=100&eastlon=140"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_invalid_nlat_2():
+    url = "/v0.1/geobox/?southlat=20&northlat=-222&westlon=100&eastlon=140"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_invalid_wlon_1():
+    url = "/v0.1/geobox/?southlat=20&northlat=22&westlon=190&eastlon=140"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_invalid_wlon_2():
+    url = "/v0.1/geobox/?southlat=20&northlat=22&westlon=-300&eastlon=140"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_invalid_elon_1():
+    url = "/v0.1/geobox/?southlat=20&northlat=22&westlon=100&eastlon=240"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_invalid_elon_2():
+    url = "/v0.1/geobox/?southlat=20&northlat=22&westlon=100&eastlon=-200"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_entire_region():
+    url = "/v0.1/geobox/?southlat=-90&northlat=90&westlon=-180&eastlon=180"
+    response = client.get(url)
+    assert response.status_code == 200
+
+
+def test_get_geobox_invalid_range_1():
+    url = "/v0.1/geobox/?southlat=40&northlat=20&westlon=-180&eastlon=180"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_invalid_range_2():
+    url = "/v0.1/geobox/?southlat=-90&northlat=90&westlon=20&eastlon=0"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_invalid_range_3():
+    url = "/v0.1/geobox/?southlat=20&northlat=-20&westlon=-40&eastlon=-60"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_str():
+    url = "/v0.1/geobox/?southlat=-90&northlat=90&westlon=-180&eastlon=zero"
+    response = client.get(url)
+    assert response.status_code == 422
+
+
+def test_get_geobox_sql_inj():
+    url = "/v0.1/geobox/?southlat=0&northlat=0&westlon=0&eastlon=0%20OR1=1"
+    response = client.get(url)
+    assert response.status_code == 422
