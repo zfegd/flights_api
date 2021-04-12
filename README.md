@@ -117,3 +117,5 @@ When running operations including the mySQL database, it is important to note th
 Errors may occur when trying to use containers but programming with a Windows context. If so, remember to change your git config with regards to line endings, and clone the repository afresh.
 
 When changing test cases, it is necessary to remove and build the images from scratch.
+
+Sanitising input is important to note, but is covered within this context by mysql-connector, as stated [here](https://stackoverflow.com/questions/7540803/escaping-strings-with-python-mysql-connector).
