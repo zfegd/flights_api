@@ -6,3 +6,19 @@ services:
       - "80:80"
     container_name: "testcontainer"
     command: pytest
+  db:
+    image: mysql
+    restart: always
+    volumes:
+      - db_info:/var/lib/mysql
+      - ./app/data:/data
+      - ./mysql-init-files:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: foobar
+      MYSQL_DATABASE: openflights
+      MYSQL_USER: client
+      MYSQL_PASSWORD: apiplease
+    ports:
+      - "3308:3306"
+    container_name: "openflightsdb"
+    command: --secure-file-priv=''
