@@ -34,16 +34,6 @@ class Message(BaseModel):
     message: str
 
 
-# TODO - REMOVE WHEN NOT NEEDED
-def load_unto_dataframe():
-    myheaders = ["AirportID", "Name", "City", "Country", "IATA", "ICAO",
-                 "Latitude", "Longitude", "Altitude", "Timezone", "DST", "TZ",
-                 "Type", "Source"]
-    df = pd.read_csv("/data/airports.dat", names=myheaders)
-    df = df.replace("\\N", "Not Found")
-    return df
-
-
 def open_connection():
     mydb = mysql.connector.connect(
       host="db",
@@ -63,22 +53,6 @@ def zip_to_dict(values):
     return dict(zip(keys, values))
 
 
-# TODO - REMOVE WHEN NOT NEEDED
-@app.get("/v0.1/trial/")
-def get_database_connected(iata: str = Query(..., regex="^[A-Z]{3}$")):
-    mydb = open_connection()
-    mycursor = mydb.cursor()
-    mycursor.execute("SELECT * FROM Airports where Country=\"Singapore\"")
-    myresult = mycursor.fetchall()
-    results = {}
-    index = 0
-    for result in myresult:
-        results.update({index: result})
-        index = index + 1
-    return results
-
-
-# TODO - change to sql
 @app.get(
     "/v0.1/airport",
     response_model=Dict[str, Airport],
@@ -120,12 +94,21 @@ def get_airport_details(airport_name: str = Query(...,
 
     For example, you can search for "Heathrow" or "London"
     """
-    df = load_unto_dataframe()
-    airport_name_esc = re.escape(airport_name)
-    relevant = df[df["Name"].str.contains(airport_name_esc, case=False)]
-    if relevant.shape[0] is 0:
+    esc_name = re.escape(airport_name)
+    mydb = open_connection()
+    mycursor = mydb.cursor()
+    query = "SELECT * FROM Airports where Name LIKE \"%" + esc_name + "%\""
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    results = {}
+    index = 0
+    if len(myresult) == 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict('index')
+    for result in myresult:
+        dictresult = zip_to_dict(result)
+        results.update({index: dictresult})
+        index = index + 1
+    return results
 
 
 @app.get(
@@ -355,7 +338,6 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
     return results
 
 
-# TODO - change to sql
 @app.get(
     "/v0.1/tzformat/",
     response_model=Dict[str, Airport],
@@ -398,14 +380,22 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
 
     For example, you can search for "Europe/London"
     """
-    df = load_unto_dataframe()
-    relevant = df[df["TZ"] == tz]
-    if relevant.shape[0] is 0:
+    mydb = open_connection()
+    mycursor = mydb.cursor()
+    query = "SELECT * FROM Airports where TZ=\"" + tz + "\""
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    results = {}
+    index = 0
+    if len(myresult) == 0:
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict('index')
+    for result in myresult:
+        dictresult = zip_to_dict(result)
+        results.update({index: dictresult})
+        index = index + 1
+    return results
 
 
-# TODO - change to sql
 @app.get(
     "/v0.1/dst/",
     response_model=Dict[str, Airport],
@@ -450,15 +440,23 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
 
     For example, you can search for "E"
     """
-    df = load_unto_dataframe()
-    relevant = df[df["DST"] == dst]
-    if relevant.shape[0] is 0:
+    mydb = open_connection()
+    mycursor = mydb.cursor()
+    query = "SELECT * FROM Airports where DST=\"" + dst + "\""
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    results = {}
+    index = 0
+    if len(myresult) == 0:
         # should never enter this branch?
         raise HTTPException(status_code=404, detail="No Entries found")
-    return relevant.to_dict('index')
+    for result in myresult:
+        dictresult = zip_to_dict(result)
+        results.update({index: dictresult})
+        index = index + 1
+    return results
 
 
-# TODO - change to sql
 @app.get(
     "/v0.1/utc/",
     response_model=Dict[str, Airport],
@@ -503,15 +501,24 @@ def get_utc_airports(time_zone: str = Query(...,
 
     For example, you can search for "0", "-11", "14", "5.75", or "3.5"
     """
-    df = load_unto_dataframe()
+    mydb = open_connection()
+    mycursor = mydb.cursor()
     timezonenum = float(time_zone)
     if timezonenum < -12 or timezonenum > 14:
         raise HTTPException(status_code=400, detail="Timezone not valid")
-    relevant = df[df["Timezone"] == time_zone]
-    if relevant.shape[0] is 0:
+    query = "SELECT * FROM Airports where Timezone=\"" + time_zone + "\""
+    mycursor.execute(query)
+    myresult = mycursor.fetchall()
+    results = {}
+    index = 0
+    if len(myresult) == 0:
         raise HTTPException(status_code=404,
                             detail="No Entries found or timezone not valid")
-    return relevant.to_dict('index')
+    for result in myresult:
+        dictresult = zip_to_dict(result)
+        results.update({index: dictresult})
+        index = index + 1
+    return results
 
 
 # def get_airport_within_geobox():
