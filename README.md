@@ -1,10 +1,10 @@
 # Flights API
-A simple project to create an API delivering data from the OpenFlights Airport Database, leveraging FastAPI and Docker technologies. The database is taken from OpenFlights' [airport database](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat). No real use case, just a simple exercise.
+A simple project to create an API delivering data from the OpenFlights Airport Database, leveraging FastAPI and Docker technologies. The database is taken from OpenFlights' [airport database](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat). No real use case, just a simple exercise. Uses wait-for-it script taken from [here](https://github.com/vishnubob/wait-for-it).
 
 ## Building
 To get started with this project, you would need to have downloaded and installed Docker. Refer to [Docker's Getting Started Page](https://docs.docker.com/get-started/) for more details.  
 
-Once Docker has been setup, navigate to this folder in terminal/command prompt. Using the Dockerfile, you can build a Docker Image using the command 
+Once Docker has been setup, navigate to this folder in terminal/command prompt. Using the Dockerfile, you can build a Docker Image using the command
 
 ```
 docker build -t testimage .
@@ -30,7 +30,7 @@ In order to delete the container, you can do so with
 docker rm testcontainer
 ```
 
-You can do the same with the image, once the container has been deleted with the command 
+You can do the same with the image, once the container has been deleted with the command
 
 ```
 docker rmi testimage
