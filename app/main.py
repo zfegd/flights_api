@@ -151,9 +151,10 @@ def get_country_airports(country_name: str = Query(...,
 
     For example, you can search for "Malaysia"
     """
+    country_name_esc = re.escape(country_name)
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports where Country=\"" + country_name + "\""
+    query = "SELECT * FROM Airports where Country=\"" + country_name_esc + "\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
@@ -207,9 +208,10 @@ def get_city_airports(city_name: str = Query(...,
 
     For example, you can search for "Manchester"
     """
+    city_name_esc = re.escape(city_name)
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports where City=\"" + city_name + "\""
+    query = "SELECT * FROM Airports where City=\"" + city_name_esc + "\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
