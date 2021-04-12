@@ -523,8 +523,70 @@ def get_utc_airports(time_zone: str = Query(...,
     return results
 
 
-# def get_airport_within_geobox():
-#     return None
-#
+@app.get(
+    "/v0.1/geobox/",
+    response_model=Dict[str, Airport],
+    responses={
+         404: {"model": Message, "description": "No Entries found"},
+         200: {
+            "description": "Airports within this area",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "502": {
+                            "AirportID": 507,
+                            "Name": "London Heathrow Airport",
+                            "City": "London",
+                            "Country": "United Kingdom",
+                            "IATA": "LHR",
+                            "ICAO": "EGLL",
+                            "Latitude": 51.4706,
+                            "Longitude": -0.461941,
+                            "Altitude": 83,
+                            "Timezone": "0",
+                            "DST": "E",
+                            "TZ": "Europe/London",
+                            "Type": "airport",
+                            "Source": "OurAirports"
+                                }
+                                }
+                            }
+                    },
+            },
+    },
+)
+def get_airport_in_geobox_naive(southlat: float = Query(..., ge=-90, le=90),
+                                northlat: float = Query(..., ge=-90, le=90),
+                                westlon: float = Query(..., ge=-180, le=180),
+                                eastlon: float = Query(..., ge=-180, le=180)):
+    """
+    Find the airports that falls within a specific geographical bound, as
+     specified by Longitudinal and Latitudinal values
+    """
+    if southlat > northlat or westlon > eastlon:
+        raise HTTPException(status_code=422, detail="Range not valid")
+    mydb = open_connection()
+    mycursor = mydb.cursor()
+    query = "SELECT * FROM Airports WHERE Latitude BETWEEN " + str(southlat)
+    query2 = " AND " + str(northlat) + " AND Longitude BETWEEN " + str(westlon)
+    query3 = " AND " + str(eastlon)
+    querytotal = query + query2 + query3
+    mycursor.execute(querytotal)
+    myresult = mycursor.fetchall()
+    results = {}
+    index = 0
+    if len(myresult) == 0:
+        raise HTTPException(status_code=404, detail="No Entries found")
+    for result in myresult:
+        dictresult = zip_to_dict(result)
+        results.update({index: dictresult})
+        index = index + 1
+    return results
 
-# def get_possible_destinations()
+
+# def get_nearest_airports(numtoget, airportid):
+# return None
+
+
+# def get_airports_within_distance(airportid, distance):
+# return None
