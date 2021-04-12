@@ -110,3 +110,9 @@ docker exec -it <container name> bash
 This allows you to access the terminal to debug, such as view the directory structure of the container.
 
 When running operations including the mySQL database, it is important to note that schemas can persist across runs if the volume remainds mounted. This may be useful if no changes are made to the database, but not great if changes to the database initialisation have to be made. If you need to clear the volumes that are used to persist database data, you can use the -V flag when running docker down. WARNING: This will delete the data stored/changes made to the database besides the initialisation found in init.sql.
+
+## TO NOTE 
+
+Errors may occur when trying to use containers but programming with a Windows context. If so, remember to change your git config with regards to line endings, and clone the repository afresh.
+
+When changing test cases, it is necessary to remove and build the images from scratch.
