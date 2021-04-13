@@ -7,9 +7,7 @@ services:
     container_name: "testcontainer"
     depends_on:
       - db
-    volumes:
-      - ./:/app
-    command: ["app/wait-for-it.sh", "db:3306", "--", "pytest"]
+    command: ["./wait-for-it.sh", "db:3306", "--", "pytest"]
   db:
     image: mysql
     restart: always
