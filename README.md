@@ -1,5 +1,7 @@
 # Flights API
-A simple project to create an API delivering data from the OpenFlights Airport Database, leveraging FastAPI and Docker technologies. The database is taken from OpenFlights' [airport database](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat). To setup this repository, download the file [here](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat) and put the .dat file in the app/data folder. No real use case, just a simple exercise. Uses wait-for-it script taken from [here](https://github.com/vishnubob/wait-for-it).
+A simple project to create an API delivering data from the OpenFlights Airport Database, leveraging FastAPI and Docker technologies. The database is taken from OpenFlights' [airport database](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat). To setup this repository, download the file [here](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat) and put the .dat file in the app/data folder. Alternatively, navigate to the app/data folder and run "make".
+
+This project has no real use case, just a simple exercise. Uses wait-for-it script taken from [here](https://github.com/vishnubob/wait-for-it).
 
 ## Building
 To get started with this project, you would need to have downloaded and installed Docker. Refer to [Docker's Getting Started Page](https://docs.docker.com/get-started/) for more details.  
