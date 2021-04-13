@@ -7,8 +7,8 @@ services:
     ports:
       - "80:80"
     container_name: "appcontainer"
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     entrypoint: /start-reload.sh
   db:
     image: mysql

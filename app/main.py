@@ -4,6 +4,7 @@ from typing import Dict, Optional
 import re
 import mysql.connector
 import config
+import descriptors
 
 
 app = FastAPI(
@@ -60,28 +61,7 @@ def zip_to_dict(values):
          404: {"model": Message, "description": "No Entries found"},
          200: {
             "description": "Airports found containing requested name",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "airportid": 507,
-                            "name": "London Heathrow Airport",
-                            "city": "London",
-                            "country": "United Kingdom",
-                            "iata": "LHR",
-                            "icao": "EGLL",
-                            "latitude": 51.4706,
-                            "longitude": -0.461941,
-                            "altitude": 83,
-                            "timezone": "0",
-                            "dst": "E",
-                            "tz": "Europe/London",
-                            "type": "airport",
-                            "source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
+            "content": descriptors.examplecontent,
             },
     },
 )
@@ -119,28 +99,7 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
          404: {"model": Message, "description": "No Entries found"},
          200: {
             "description": "Airports found in the country requested",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "airportid": 507,
-                            "name": "London Heathrow Airport",
-                            "city": "London",
-                            "country": "United Kingdom",
-                            "iata": "LHR",
-                            "icao": "EGLL",
-                            "latitude": 51.4706,
-                            "longitude": -0.461941,
-                            "altitude": 83,
-                            "timezone": "0",
-                            "dst": "E",
-                            "tz": "Europe/London",
-                            "type": "airport",
-                            "source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
+            "content": descriptors.examplecontent,
             },
     },
 )
@@ -177,28 +136,7 @@ def get_country_airports(country_name: str = Query(..., min_length=1,
          404: {"model": Message, "description": "No Entries found"},
          200: {
             "description": "Airports found in the city requested",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "airportid": 507,
-                            "name": "London Heathrow Airport",
-                            "city": "London",
-                            "country": "United Kingdom",
-                            "iata": "LHR",
-                            "icao": "EGLL",
-                            "latitude": 51.4706,
-                            "longitude": -0.461941,
-                            "altitude": 83,
-                            "timezone": "0",
-                            "dst": "E",
-                            "tz": "Europe/London",
-                            "type": "airport",
-                            "source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
+            "content": descriptors.examplecontent,
             },
     },
 )
@@ -235,28 +173,7 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
          404: {"model": Message, "description": "No Entries found"},
          200: {
             "description": "Airport with the IATA code requested",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "airportid": 507,
-                            "name": "London Heathrow Airport",
-                            "city": "London",
-                            "country": "United Kingdom",
-                            "iata": "LHR",
-                            "icao": "EGLL",
-                            "latitude": 51.4706,
-                            "longitude": -0.461941,
-                            "altitude": 83,
-                            "timezone": "0",
-                            "dst": "E",
-                            "tz": "Europe/London",
-                            "type": "airport",
-                            "source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
+            "content": descriptors.examplecontent,
             },
     },
 )
@@ -293,28 +210,7 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
          404: {"model": Message, "description": "No Entries found"},
          200: {
             "description": "Airport with the ICAO code requested",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "airportid": 507,
-                            "name": "London Heathrow Airport",
-                            "city": "London",
-                            "country": "United Kingdom",
-                            "iata": "LHR",
-                            "icao": "EGLL",
-                            "latitude": 51.4706,
-                            "longitude": -0.461941,
-                            "altitude": 83,
-                            "timezone": "0",
-                            "dst": "E",
-                            "tz": "Europe/London",
-                            "type": "airport",
-                            "source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
+            "content": descriptors.examplecontent,
             },
     },
 )
@@ -352,28 +248,7 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
          404: {"model": Message, "description": "No Entries found"},
          200: {
             "description": "Airports within this tz timezone",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "airportid": 507,
-                            "name": "London Heathrow Airport",
-                            "city": "London",
-                            "country": "United Kingdom",
-                            "iata": "LHR",
-                            "icao": "EGLL",
-                            "latitude": 51.4706,
-                            "longitude": -0.461941,
-                            "altitude": 83,
-                            "timezone": "0",
-                            "dst": "E",
-                            "tz": "Europe/London",
-                            "type": "airport",
-                            "source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
+            "content": descriptors.examplecontent,
             },
     },
 )
@@ -411,28 +286,7 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
          404: {"model": Message, "description": "No Entries found"},
          200: {
             "description": "Airports within a dst timezone",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "airportid": 507,
-                            "name": "London Heathrow Airport",
-                            "city": "London",
-                            "country": "United Kingdom",
-                            "iata": "LHR",
-                            "icao": "EGLL",
-                            "latitude": 51.4706,
-                            "longitude": -0.461941,
-                            "altitude": 83,
-                            "timezone": "0",
-                            "dst": "E",
-                            "tz": "Europe/London",
-                            "type": "airport",
-                            "source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
+            "content": descriptors.examplecontent,
             },
     },
 )
@@ -473,28 +327,7 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
          404: {"model": Message, "description": "No Entries found"},
          200: {
             "description": "Airports within this UTC offset range",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "airportid": 507,
-                            "name": "London Heathrow Airport",
-                            "city": "London",
-                            "country": "United Kingdom",
-                            "iata": "LHR",
-                            "icao": "EGLL",
-                            "latitude": 51.4706,
-                            "longitude": -0.461941,
-                            "altitude": 83,
-                            "timezone": "0",
-                            "dst": "E",
-                            "tz": "Europe/London",
-                            "type": "airport",
-                            "source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
+            "content": descriptors.examplecontent,
             },
     },
 )
@@ -538,28 +371,7 @@ def get_utc_airports(time_zone: str = Query(...,
          404: {"model": Message, "description": "No Entries found"},
          200: {
             "description": "Airports within this area",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "502": {
-                            "airportid": 507,
-                            "name": "London Heathrow Airport",
-                            "city": "London",
-                            "country": "United Kingdom",
-                            "iata": "LHR",
-                            "icao": "EGLL",
-                            "latitude": 51.4706,
-                            "longitude": -0.461941,
-                            "altitude": 83,
-                            "timezone": "0",
-                            "dst": "E",
-                            "tz": "Europe/London",
-                            "type": "airport",
-                            "source": "OurAirports"
-                                }
-                                }
-                            }
-                    },
+            "content": descriptors.examplecontent,
             },
     },
 )
