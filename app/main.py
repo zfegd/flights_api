@@ -108,6 +108,7 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
         dictresult = zip_to_dict(result)
         results.update({index: dictresult})
         index = index + 1
+    mycursor.close()
     return results
 
 
@@ -165,6 +166,7 @@ def get_country_airports(country_name: str = Query(..., min_length=1,
         dictresult = zip_to_dict(result)
         results.update({index: dictresult})
         index = index + 1
+    mycursor.close()
     return results
 
 
@@ -222,6 +224,7 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
         dictresult = zip_to_dict(result)
         results.update({index: dictresult})
         index = index + 1
+    mycursor.close()
     return results
 
 
@@ -279,6 +282,7 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
         dictresult = zip_to_dict(result)
         results.update({index: dictresult})
         index = index + 1
+    mycursor.close()
     return results
 
 
@@ -337,6 +341,7 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
         dictresult = zip_to_dict(result)
         results.update({index: dictresult})
         index = index + 1
+    mycursor.close()
     return results
 
 
@@ -395,6 +400,7 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
         dictresult = zip_to_dict(result)
         results.update({index: dictresult})
         index = index + 1
+    mycursor.close()
     return results
 
 
@@ -456,6 +462,7 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
         dictresult = zip_to_dict(result)
         results.update({index: dictresult})
         index = index + 1
+    mycursor.close()
     return results
 
 
@@ -520,6 +527,7 @@ def get_utc_airports(time_zone: str = Query(...,
         dictresult = zip_to_dict(result)
         results.update({index: dictresult})
         index = index + 1
+    mycursor.close()
     return results
 
 
@@ -581,6 +589,7 @@ def get_airport_in_geobox_naive(southlat: float = Query(..., ge=-90, le=90),
         dictresult = zip_to_dict(result)
         results.update({index: dictresult})
         index = index + 1
+    mycursor.close()
     return results
 
 
