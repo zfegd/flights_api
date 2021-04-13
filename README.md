@@ -71,6 +71,20 @@ Similarly to above, on Windows you have to replace "$(pwd)" with the absolute pa
 docker run -p 80:80 --name testcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage pytest
 ```
 
+## Load Testing
+
+We can load test by using locust, which can either be run locally or within a separate docker container in the same network. For the former, you have to run "pip install locust" to setup locust on your local machine. Then, you can "docker-compose up" and run the locust command once your testcontainer is up. To test with locust, navigate to the folder the locustfile.py is located and run:
+
+```
+locust -f locustfile.py
+```
+
+You can now head to localhost:8089 to interact with the locust web interface. For the second option, all you have to do instead is head to localhost:8089 after running:
+
+```
+docker-compose -f docker-compose.loadtest.yml up
+```
+
 ## Using Docker Compose
 
 With the docker-compose.yml file, we can use docker-compose to handle the processes instead. To faciltate debugging/querying mode vs testing mode, there are 2 docker-compose files included for either purpose. To handle the build and running process, use :
