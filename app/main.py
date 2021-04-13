@@ -75,11 +75,23 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
     For example, you can search for "Heathrow" or "London"
     """
     esc_name = re.escape(airport_name)
-    mydb = open_connection()
-    mycursor = mydb.cursor()
+    try:
+        mydb = open_connection()
+    except mysql.connector.Error:
+        raise HTTPException(status_code=500,
+                            detail="Could not connect to database")
+    try:
+        mycursor = mydb.cursor()
+    except mysql.connector.Error:
+        raise HTTPException(status_code=500,
+                            detail="Database Error")
     query = "SELECT * FROM Airports where name LIKE \"%" + esc_name + "%\""
-    mycursor.execute(query)
-    myresult = mycursor.fetchall()
+    try:
+        mycursor.execute(query)
+        myresult = mycursor.fetchall()
+    except mysql.connector.Error:
+        raise HTTPException(status_code=500,
+                            detail="Query to database failed!")
     results = {}
     index = 0
     if len(myresult) == 0:
