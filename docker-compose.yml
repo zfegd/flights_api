@@ -9,8 +9,6 @@ services:
     container_name: "testcontainer"
     depends_on:
       - db
-    volumes:
-      - ./:/app
     entrypoint: /start-reload.sh
   db:
     image: mysql

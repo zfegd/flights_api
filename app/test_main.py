@@ -24,7 +24,7 @@ def test_get_airport_special():
 
 
 def test_get_airport_no_entries():
-    response = client.get("/airport/kjsjdks")
+    response = client.get("/v0.1/airport?airport_name=kjsjdks")
     assert response.status_code == 404
 
 

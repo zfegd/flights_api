@@ -7,7 +7,6 @@ services:
     container_name: "testcontainer"
     depends_on:
       - db
-    # command: pytest
     command: ["./wait-for-it.sh", "db:3306", "--", "pytest"]
   db:
     image: mysql

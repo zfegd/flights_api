@@ -1,0 +1,36 @@
+version: "3.8"
+volumes:
+  db_info:
+services:
+  app:
+    build: .
+    ports:
+      - "80:80"
+    container_name: "testcontainer"
+    depends_on:
+      - db
+  db:
+    image: mysql
+    restart: always
+    volumes:
+      - db_info:/var/lib/mysql
+      - ./app/data:/data
+      - ./mysql-init-files:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SQLROOTPASS}
+      MYSQL_DATABASE: openflights
+      MYSQL_USER: ${SQLUSER}
+      MYSQL_PASSWORD: ${SQLPASS}
+    ports:
+      - "3308:3306"
+    container_name: "openflightsdb"
+    command: --secure-file-priv=''
+  loadtester:
+    image : locustio/locust
+    ports:
+      - "8089:8089"
+    depends_on:
+      - app
+    volumes:
+      - ./app:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --host=http://app:80
