@@ -13,20 +13,20 @@ app = FastAPI(
 
 
 class Airport(BaseModel):
-    AirportID: int
-    Name: str
-    City: str
-    Country: str
-    IATA: Optional[str] = None
-    ICAO: Optional[str] = None
-    Latitude: float
-    Longitude: float
-    Altitude: int
-    Timezone: Optional[str] = None
-    DST: Optional[str] = None
-    TZ: Optional[str] = None
-    Type: str
-    Source: str
+    airportid: int
+    name: str
+    city: str
+    country: str
+    iata: Optional[str] = None
+    icao: Optional[str] = None
+    latitude: float
+    longitude: float
+    altitude: int
+    timezone: Optional[str] = None
+    dst: Optional[str] = None
+    tz: Optional[str] = None
+    type: str
+    source: str
 
 
 class Message(BaseModel):
@@ -44,9 +44,9 @@ def open_connection():
 
 
 def zip_to_dict(values):
-    keys = ["AirportID", "Name", "City", "Country", "IATA", "ICAO",
-            "Latitude", "Longitude", "Altitude", "Timezone", "DST", "TZ",
-            "Type", "Source"]
+    keys = ["airportid", "name", "city", "country", "iata", "icao",
+            "latitude", "longitude", "altitude", "timezone", "dst", "tz",
+            "type", "source"]
     if len(values) != len(keys):
         return None
     return dict(zip(keys, values))
@@ -63,20 +63,20 @@ def zip_to_dict(values):
                 "application/json": {
                     "example": {
                         "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
+                            "airportid": 507,
+                            "name": "London Heathrow Airport",
+                            "city": "London",
+                            "country": "United Kingdom",
+                            "iata": "LHR",
+                            "icao": "EGLL",
+                            "latitude": 51.4706,
+                            "longitude": -0.461941,
+                            "altitude": 83,
+                            "timezone": "0",
+                            "dst": "E",
+                            "tz": "Europe/London",
+                            "type": "airport",
+                            "source": "OurAirports"
                                 }
                                 }
                             }
@@ -96,7 +96,7 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
     esc_name = re.escape(airport_name)
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports where Name LIKE \"%" + esc_name + "%\""
+    query = "SELECT * FROM Airports where name LIKE \"%" + esc_name + "%\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
@@ -121,20 +121,20 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
                 "application/json": {
                     "example": {
                         "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
+                            "airportid": 507,
+                            "name": "London Heathrow Airport",
+                            "city": "London",
+                            "country": "United Kingdom",
+                            "iata": "LHR",
+                            "icao": "EGLL",
+                            "latitude": 51.4706,
+                            "longitude": -0.461941,
+                            "altitude": 83,
+                            "timezone": "0",
+                            "dst": "E",
+                            "tz": "Europe/London",
+                            "type": "airport",
+                            "source": "OurAirports"
                                 }
                                 }
                             }
@@ -153,7 +153,7 @@ def get_country_airports(country_name: str = Query(..., min_length=1,
     country_name_esc = re.escape(country_name)
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports where Country=\"" + country_name_esc + "\""
+    query = "SELECT * FROM Airports where country=\"" + country_name_esc + "\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
@@ -178,20 +178,20 @@ def get_country_airports(country_name: str = Query(..., min_length=1,
                 "application/json": {
                     "example": {
                         "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
+                            "airportid": 507,
+                            "name": "London Heathrow Airport",
+                            "city": "London",
+                            "country": "United Kingdom",
+                            "iata": "LHR",
+                            "icao": "EGLL",
+                            "latitude": 51.4706,
+                            "longitude": -0.461941,
+                            "altitude": 83,
+                            "timezone": "0",
+                            "dst": "E",
+                            "tz": "Europe/London",
+                            "type": "airport",
+                            "source": "OurAirports"
                                 }
                                 }
                             }
@@ -210,7 +210,7 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
     city_name_esc = re.escape(city_name)
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports where City=\"" + city_name_esc + "\""
+    query = "SELECT * FROM Airports where city=\"" + city_name_esc + "\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
@@ -235,20 +235,20 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
                 "application/json": {
                     "example": {
                         "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
+                            "airportid": 507,
+                            "name": "London Heathrow Airport",
+                            "city": "London",
+                            "country": "United Kingdom",
+                            "iata": "LHR",
+                            "icao": "EGLL",
+                            "latitude": 51.4706,
+                            "longitude": -0.461941,
+                            "altitude": 83,
+                            "timezone": "0",
+                            "dst": "E",
+                            "tz": "Europe/London",
+                            "type": "airport",
+                            "source": "OurAirports"
                                 }
                                 }
                             }
@@ -267,7 +267,7 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
     """
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports where IATA=\"" + iata_code + "\""
+    query = "SELECT * FROM Airports where iata=\"" + iata_code + "\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
@@ -292,20 +292,20 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
                 "application/json": {
                     "example": {
                         "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
+                            "airportid": 507,
+                            "name": "London Heathrow Airport",
+                            "city": "London",
+                            "country": "United Kingdom",
+                            "iata": "LHR",
+                            "icao": "EGLL",
+                            "latitude": 51.4706,
+                            "longitude": -0.461941,
+                            "altitude": 83,
+                            "timezone": "0",
+                            "dst": "E",
+                            "tz": "Europe/London",
+                            "type": "airport",
+                            "source": "OurAirports"
                                 }
                                 }
                             }
@@ -325,7 +325,7 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
     """
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports where ICAO=\"" + icao_code + "\""
+    query = "SELECT * FROM Airports where icao=\"" + icao_code + "\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
@@ -350,20 +350,20 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
                 "application/json": {
                     "example": {
                         "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
+                            "airportid": 507,
+                            "name": "London Heathrow Airport",
+                            "city": "London",
+                            "country": "United Kingdom",
+                            "iata": "LHR",
+                            "icao": "EGLL",
+                            "latitude": 51.4706,
+                            "longitude": -0.461941,
+                            "altitude": 83,
+                            "timezone": "0",
+                            "dst": "E",
+                            "tz": "Europe/London",
+                            "type": "airport",
+                            "source": "OurAirports"
                                 }
                                 }
                             }
@@ -383,7 +383,7 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
     """
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports where TZ=\"" + tz + "\""
+    query = "SELECT * FROM Airports where tz=\"" + tz + "\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
@@ -408,20 +408,20 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
                 "application/json": {
                     "example": {
                         "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
+                            "airportid": 507,
+                            "name": "London Heathrow Airport",
+                            "city": "London",
+                            "country": "United Kingdom",
+                            "iata": "LHR",
+                            "icao": "EGLL",
+                            "latitude": 51.4706,
+                            "longitude": -0.461941,
+                            "altitude": 83,
+                            "timezone": "0",
+                            "dst": "E",
+                            "tz": "Europe/London",
+                            "type": "airport",
+                            "source": "OurAirports"
                                 }
                                 }
                             }
@@ -443,7 +443,7 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
     """
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports where DST=\"" + dst + "\""
+    query = "SELECT * FROM Airports where dst=\"" + dst + "\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
@@ -469,20 +469,20 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
                 "application/json": {
                     "example": {
                         "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
+                            "airportid": 507,
+                            "name": "London Heathrow Airport",
+                            "city": "London",
+                            "country": "United Kingdom",
+                            "iata": "LHR",
+                            "icao": "EGLL",
+                            "latitude": 51.4706,
+                            "longitude": -0.461941,
+                            "altitude": 83,
+                            "timezone": "0",
+                            "dst": "E",
+                            "tz": "Europe/London",
+                            "type": "airport",
+                            "source": "OurAirports"
                                 }
                                 }
                             }
@@ -507,7 +507,7 @@ def get_utc_airports(time_zone: str = Query(...,
     timezonenum = float(time_zone)
     if timezonenum < -12 or timezonenum > 14:
         raise HTTPException(status_code=400, detail="Timezone not valid")
-    query = "SELECT * FROM Airports where Timezone=\"" + time_zone + "\""
+    query = "SELECT * FROM Airports where timezone=\"" + time_zone + "\""
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     results = {}
@@ -533,20 +533,20 @@ def get_utc_airports(time_zone: str = Query(...,
                 "application/json": {
                     "example": {
                         "502": {
-                            "AirportID": 507,
-                            "Name": "London Heathrow Airport",
-                            "City": "London",
-                            "Country": "United Kingdom",
-                            "IATA": "LHR",
-                            "ICAO": "EGLL",
-                            "Latitude": 51.4706,
-                            "Longitude": -0.461941,
-                            "Altitude": 83,
-                            "Timezone": "0",
-                            "DST": "E",
-                            "TZ": "Europe/London",
-                            "Type": "airport",
-                            "Source": "OurAirports"
+                            "airportid": 507,
+                            "name": "London Heathrow Airport",
+                            "city": "London",
+                            "country": "United Kingdom",
+                            "iata": "LHR",
+                            "icao": "EGLL",
+                            "latitude": 51.4706,
+                            "longitude": -0.461941,
+                            "altitude": 83,
+                            "timezone": "0",
+                            "dst": "E",
+                            "tz": "Europe/London",
+                            "type": "airport",
+                            "source": "OurAirports"
                                 }
                                 }
                             }
@@ -566,8 +566,8 @@ def get_airport_in_geobox_naive(southlat: float = Query(..., ge=-90, le=90),
         raise HTTPException(status_code=422, detail="Range not valid")
     mydb = open_connection()
     mycursor = mydb.cursor()
-    query = "SELECT * FROM Airports WHERE Latitude BETWEEN " + str(southlat)
-    query2 = " AND " + str(northlat) + " AND Longitude BETWEEN " + str(westlon)
+    query = "SELECT * FROM Airports WHERE latitude BETWEEN " + str(southlat)
+    query2 = " AND " + str(northlat) + " AND longitude BETWEEN " + str(westlon)
     query3 = " AND " + str(eastlon)
     querytotal = query + query2 + query3
     mycursor.execute(querytotal)
