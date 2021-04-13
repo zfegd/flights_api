@@ -11,6 +11,7 @@ services:
     depends_on:
       - db
     command: ["./wait-for-it.sh", "db:3306", "--", "locust", "-f", "load_test.py"]
+    # command: ["./wait-for-it.sh", "db:3306", "--", "locust", "-f", "load_test.py"]
   db:
     image: mysql
     restart: always

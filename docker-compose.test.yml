@@ -9,8 +9,7 @@ services:
       - db
     volumes:
       - ./:/app
-    # command: pytest
-    command: ["./wait-for-it.sh", "db:3306", "--", "pytest"]
+    command: ["app/wait-for-it.sh", "db:3306", "--", "pytest"]
   db:
     image: mysql
     restart: always

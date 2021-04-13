@@ -15,7 +15,6 @@ class MyUser(HttpUser):
         self.client.get("/v0.1/airport?airport_name=a")
 
 
-
 # class UserBehavior(TaskSet):
 #
 #     @task
