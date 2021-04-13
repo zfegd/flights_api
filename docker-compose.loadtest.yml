@@ -6,7 +6,7 @@ services:
     build: .
     ports:
       - "80:80"
-    container_name: "testcontainer"
+    container_name: "appcontainer"
     depends_on:
       - db
   db:

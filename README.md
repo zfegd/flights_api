@@ -13,21 +13,21 @@ docker build -t testimage .
 I have tagged the image I just built with the name "testimage" for ease of reference. Once it has been built, you can use this image to create a container, with the following command
 
 ```
-docker run -d --name testcontainer -p 80:80 testimage
+docker run -d --name appcontainer -p 80:80 testimage
 ```
 
-This uses the image to run a container, mapping the container's port 80 to your computer's port 80, and this container has a name of "testcontainer". The container is now active and you can hit the endpoints via your browser or curl. For example, if you navigate to [localhost:80/city/london](localhost:80/city/london), you can find all the airports in London.  
+This uses the image to run a container, mapping the container's port 80 to your computer's port 80, and this container has a name of "appcontainer". The container is now active and you can hit the endpoints via your browser or curl. For example, if you navigate to [localhost:80/city/london](localhost:80/city/london), you can find all the airports in London.  
 
 When you want to stop the container, you can run the command below
 
 ```
-docker stop testcontainer
+docker stop appcontainer
 ```
 
 In order to delete the container, you can do so with
 
 ```
-docker rm testcontainer
+docker rm appcontainer
 ```
 
 You can do the same with the image, once the container has been deleted with the command
@@ -39,14 +39,14 @@ docker rmi testimage
 For live re-deployment, we can leverage the start-reload implementation by the image, as seen [here](https://github.com/tiangolo/uvicorn-gunicorn-docker#development-live-reload). Upon building the image as detailed above, simply run with this command instead
 
 ```
-docker run -dp 80:80 --name testcontainer -v $(pwd):/app testimage /start-reload.sh
+docker run -dp 80:80 --name appcontainer -v $(pwd):/app testimage /start-reload.sh
 ```
 
 If being used on Windows, simply replace "$(pwd)" with the absolute path of the directory in quotation marks. you can obtain this info with the command cd in terminal.
 An example would be:
 
 ```
-docker run -dp 80:80 --name testcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage /start-reload.sh
+docker run -dp 80:80 --name appcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage /start-reload.sh
 ```
 
 Now, every change you make will be automatically updated in browser without needing to create a new container each time.  
@@ -54,7 +54,7 @@ Now, every change you make will be automatically updated in browser without need
 If you wish to view the logs, you can use:
 
 ```
-docker logs -f testcontainer
+docker logs -f appcontainer
 ```
 
 ## Testing
@@ -62,18 +62,18 @@ docker logs -f testcontainer
 Once you have built the image, you can call on the tests with the following command:
 
 ```
-docker run -p 80:80 --name testcontainer -v $(pwd):/app testimage pytest
+docker run -p 80:80 --name appcontainer -v $(pwd):/app testimage pytest
 ```
 
 Similarly to above, on Windows you have to replace "$(pwd)" with the absolute path of the directory in quotation marks. An example would be:
 
 ```
-docker run -p 80:80 --name testcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage pytest
+docker run -p 80:80 --name appcontainer -v "C:\Users\zfegd\example\hereitis":/app testimage pytest
 ```
 
 ## Load Testing
 
-We can load test by using locust, which can either be run locally or within a separate docker container in the same network. For the former, you have to run "pip install locust" to setup locust on your local machine. Then, you can "docker-compose up" and run the locust command once your testcontainer is up. To test with locust, navigate to the folder the locustfile.py is located and run:
+We can load test by using locust, which can either be run locally or within a separate docker container in the same network. For the former, you have to run "pip install locust" to setup locust on your local machine. Then, you can "docker-compose up" and run the locust command once your appcontainer is up. To test with locust, navigate to the folder the locustfile.py is located and run:
 
 ```
 locust -f locustfile.py

@@ -4,7 +4,7 @@ services:
     build: .
     ports:
       - "80:80"
-    container_name: "testcontainer"
+    container_name: "appcontainer"
     depends_on:
       - db
     command: ["./wait-for-it.sh", "db:3306", "--", "pytest"]
