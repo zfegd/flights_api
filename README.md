@@ -1,5 +1,5 @@
 # Flights API
-A simple project to create an API delivering data from the OpenFlights Airport Database, leveraging FastAPI and Docker technologies. The database is taken from OpenFlights' [airport database](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat). No real use case, just a simple exercise. Uses wait-for-it script taken from [here](https://github.com/vishnubob/wait-for-it).
+A simple project to create an API delivering data from the OpenFlights Airport Database, leveraging FastAPI and Docker technologies. The database is taken from OpenFlights' [airport database](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat). To setup this repository, download the file [here](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat) and put the .dat file in the app/data folder. No real use case, just a simple exercise. Uses wait-for-it script taken from [here](https://github.com/vishnubob/wait-for-it).
 
 ## Building
 To get started with this project, you would need to have downloaded and installed Docker. Refer to [Docker's Getting Started Page](https://docs.docker.com/get-started/) for more details.  
@@ -126,7 +126,7 @@ This allows you to access the terminal to debug, such as view the directory stru
 
 When running operations including the mySQL database, it is important to note that schemas can persist across runs if the volume remainds mounted. This may be useful if no changes are made to the database, but not great if changes to the database initialisation have to be made. If you need to clear the volumes that are used to persist database data, you can use the -V flag when running docker down. WARNING: This will delete the data stored/changes made to the database besides the initialisation found in init.sql.
 
-## TO NOTE 
+## TO NOTE
 
 Errors may occur when trying to use containers but programming with a Windows context. If so, remember to change your git config with regards to line endings, and clone the repository afresh.
 
