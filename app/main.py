@@ -53,7 +53,7 @@ def zip_to_dict(values):
 
 
 @app.get(
-    "/v0.1/airport",
+    "/v1/airport",
     response_model=Dict[str, Airport],
     responses={
          404: {"model": Message, "description": "No Entries found"},
@@ -111,7 +111,7 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
 
 
 @app.get(
-    "/v0.1/country/",
+    "/v1/country/",
     response_model=Dict[str, Airport],
     responses={
          404: {"model": Message, "description": "No Entries found"},
@@ -168,7 +168,7 @@ def get_country_airports(country_name: str = Query(..., min_length=1,
 
 
 @app.get(
-    "/v0.1/city/",
+    "/v1/city/",
     response_model=Dict[str, Airport],
     responses={
          404: {"model": Message, "description": "No Entries found"},
@@ -225,7 +225,7 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
 
 
 @app.get(
-    "/v0.1/IATA/",
+    "/v1/IATA/",
     response_model=Dict[str, Airport],
     responses={
          404: {"model": Message, "description": "No Entries found"},
@@ -282,7 +282,7 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
 
 
 @app.get(
-    "/v0.1/ICAO/",
+    "/v1/ICAO/",
     response_model=Dict[str, Airport],
     responses={
          404: {"model": Message, "description": "No Entries found"},
@@ -340,7 +340,7 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
 
 
 @app.get(
-    "/v0.1/tzformat/",
+    "/v1/tzformat/",
     response_model=Dict[str, Airport],
     responses={
          404: {"model": Message, "description": "No Entries found"},
@@ -398,7 +398,7 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
 
 
 @app.get(
-    "/v0.1/dst/",
+    "/v1/dst/",
     response_model=Dict[str, Airport],
     responses={
          404: {"model": Message, "description": "No Entries found"},
@@ -459,7 +459,7 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
 
 
 @app.get(
-    "/v0.1/utc/",
+    "/v1/utc/",
     response_model=Dict[str, Airport],
     responses={
          404: {"model": Message, "description": "No Entries found"},
@@ -523,7 +523,7 @@ def get_utc_airports(time_zone: str = Query(...,
 
 
 @app.get(
-    "/v0.1/geobox/",
+    "/v1/geobox/",
     response_model=Dict[str, Airport],
     responses={
          404: {"model": Message, "description": "No Entries found"},
