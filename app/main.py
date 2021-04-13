@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Dict, Optional
 import re
 import mysql.connector
+import config
 
 
 app = FastAPI(
@@ -36,8 +37,8 @@ class Message(BaseModel):
 def open_connection():
     mydb = mysql.connector.connect(
       host="db",
-      user="client",
-      password="apiplease",
+      user=config.user,
+      password=config.password,
       database="openflights"
     )
     return mydb
