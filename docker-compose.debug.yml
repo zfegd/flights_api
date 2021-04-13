@@ -7,8 +7,11 @@ services:
     ports:
       - "80:80"
     container_name: "appcontainer"
+    volumes:
+      - ./:/app
     depends_on:
       - db
+    entrypoint: /start-reload.sh
   db:
     image: mysql
     restart: always
@@ -25,13 +28,3 @@ services:
       - "3308:3306"
     container_name: "openflightsdb"
     command: --secure-file-priv=''
-  loadtester:
-    image : locustio/locust
-    ports:
-      - "8089:8089"
-    depends_on:
-      - app
-    container_name: "loadtestcontainer"
-    volumes:
-      - ./app:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --host=http://app:80
