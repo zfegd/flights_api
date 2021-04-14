@@ -183,13 +183,13 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Database Error")
+    query = "SELECT * FROM Airports where city=\"" + city_name_esc + "\""
     try:
         mycursor.execute(query)
         myresult = mycursor.fetchall()
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    query = "SELECT * FROM Airports where city=\"" + city_name_esc + "\""
     results = {}
     index = 0
     if len(myresult) == 0:
@@ -496,7 +496,7 @@ def get_airport_in_geobox_naive(southlat: float = Query(..., ge=-90, le=90),
     query3 = " AND " + str(eastlon)
     querytotal = query + query2 + query3
     try:
-        mycursor.execute(query)
+        mycursor.execute(querytotal)
         myresult = mycursor.fetchall()
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
