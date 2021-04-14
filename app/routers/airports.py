@@ -51,25 +51,9 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
     For example, you can search for "Heathrow" or "London"
     """
     esc_name = re.escape(airport_name)
-    try:
-        mydb = database_handler.open_connection()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Could not connect to database")
-    try:
-        mycursor = mydb.cursor()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Database Error")
     query = "SELECT * FROM Airports where name LIKE \"%" + esc_name + "%\""
-    try:
-        mycursor.execute(query)
-        myresult = mycursor.fetchall()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Query to database failed!")
+    myresult = database_handler.fetch_query_results(query)
     results = helper_library.result_parser(myresult)
-    mycursor.close()
     return results
 
 
@@ -93,25 +77,9 @@ def get_country_airports(country_name: str = Query(..., min_length=1,
     For example, you can search for "Malaysia"
     """
     country_name_esc = re.escape(country_name)
-    try:
-        mydb = database_handler.open_connection()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Could not connect to database")
-    try:
-        mycursor = mydb.cursor()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Database Error")
     query = "SELECT * FROM Airports where country=\"" + country_name_esc + "\""
-    try:
-        mycursor.execute(query)
-        myresult = mycursor.fetchall()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Query to database failed!")
+    myresult = database_handler.fetch_query_results(query)
     results = helper_library.result_parser(myresult)
-    mycursor.close()
     return results
 
 
@@ -135,25 +103,9 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
     For example, you can search for "Manchester"
     """
     city_name_esc = re.escape(city_name)
-    try:
-        mydb = database_handler.open_connection()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Could not connect to database")
-    try:
-        mycursor = mydb.cursor()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Database Error")
     query = "SELECT * FROM Airports where city=\"" + city_name_esc + "\""
-    try:
-        mycursor.execute(query)
-        myresult = mycursor.fetchall()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Query to database failed!")
+    myresult = database_handler.fetch_query_results(query)
     results = helper_library.result_parser(myresult)
-    mycursor.close()
     return results
 
 
@@ -177,25 +129,9 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
 
     For example, you can search for "LHR"
     """
-    try:
-        mydb = database_handler.open_connection()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Could not connect to database")
-    try:
-        mycursor = mydb.cursor()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Database Error")
     query = "SELECT * FROM Airports where iata=\"" + iata_code + "\""
-    try:
-        mycursor.execute(query)
-        myresult = mycursor.fetchall()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Query to database failed!")
+    myresult = database_handler.fetch_query_results(query)
     results = helper_library.result_parser(myresult)
-    mycursor.close()
     return results
 
 
@@ -220,25 +156,9 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
 
     For example, you can search for "EGLL"
     """
-    try:
-        mydb = database_handler.open_connection()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Could not connect to database")
-    try:
-        mycursor = mydb.cursor()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Database Error")
     query = "SELECT * FROM Airports where icao=\"" + icao_code + "\""
-    try:
-        mycursor.execute(query)
-        myresult = mycursor.fetchall()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Query to database failed!")
+    myresult = database_handler.fetch_query_results(query)
     results = helper_library.result_parser(myresult)
-    mycursor.close()
     return results
 
 
@@ -263,25 +183,9 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
 
     For example, you can search for "Europe/London"
     """
-    try:
-        mydb = database_handler.open_connection()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Could not connect to database")
-    try:
-        mycursor = mydb.cursor()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Database Error")
     query = "SELECT * FROM Airports where tz=\"" + tz + "\""
-    try:
-        mycursor.execute(query)
-        myresult = mycursor.fetchall()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Query to database failed!")
+    myresult = database_handler.fetch_query_results(query)
     results = helper_library.result_parser(myresult)
-    mycursor.close()
     return results
 
 
@@ -308,25 +212,9 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
 
     For example, you can search for "E"
     """
-    try:
-        mydb = database_handler.open_connection()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Could not connect to database")
-    try:
-        mycursor = mydb.cursor()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Database Error")
     query = "SELECT * FROM Airports where dst=\"" + dst + "\""
-    try:
-        mycursor.execute(query)
-        myresult = mycursor.fetchall()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Query to database failed!")
+    myresult = database_handler.fetch_query_results(query)
     results = helper_library.result_parser(myresult)
-    mycursor.close()
     return results
 
 
@@ -353,29 +241,13 @@ def get_utc_airports(time_zone: str = Query(...,
 
     For example, you can search for "0", "-11", "14", "5.75", or "3.5"
     """
-    try:
-        mydb = database_handler.open_connection()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Could not connect to database")
-    try:
-        mycursor = mydb.cursor()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Database Error")
     timezonenum = float(time_zone)
     if timezonenum < -12 or timezonenum > 14:
         raise HTTPException(status_code=400, detail="Timezone not valid")
     query = "SELECT * FROM Airports where timezone=\"" + time_zone + "\""
-    try:
-        mycursor.execute(query)
-        myresult = mycursor.fetchall()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Query to database failed!")
+    myresult = database_handler.fetch_query_results(query)
     errmsg = "No Entries found or Timezone not valid"
     results = helper_library.result_parser(myresult, errmsg)
-    mycursor.close()
     return results
 
 
@@ -398,25 +270,9 @@ def get_airport_in_geobox_naive(southlat: float = Query(..., ge=-90, le=90),
     Find the airports that falls within a specific geographical bound, as
      specified by Longitudinal and Latitudinal values
     """
-    try:
-        mydb = database_handler.open_connection()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Could not connect to database")
-    try:
-        mycursor = mydb.cursor()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Database Error")
     querytotal = get_airport_geobox_query(southlat, northlat, westlon, eastlon)
-    try:
-        mycursor.execute(querytotal)
-        myresult = mycursor.fetchall()
-    except mysql.connector.Error:
-        raise HTTPException(status_code=500,
-                            detail="Query to database failed!")
+    myresult = database_handler.fetch_query_results(querytotal)
     results = helper_library.result_parser(myresult)
-    mycursor.close()
     return results
 
 
