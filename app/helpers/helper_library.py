@@ -16,6 +16,6 @@ def result_parser(myresult, detailmsg="No Entries found"):
     if len(myresult) == 0:
         raise HTTPException(status_code=404, detail=detailmsg)
     for result in myresult:
-        dictresult = airports_zip_to_dict(result)
-        results = results + [dictresult]
+        nextairport = airports_zip_to_dict(result)
+        results = results + [nextairport]
     return results
