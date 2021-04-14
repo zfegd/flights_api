@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
-from typing import Dict
+from typing import List
 import re
 from admin import database_handler
 from helpers import descriptors, helper_library
@@ -10,7 +10,7 @@ router = APIRouter()
 
 @router.get(
     "/v1/airport",
-    response_model=Dict[str, airportmodel.Airport],
+    response_model=List[airportmodel.Airport],
     responses={
          404: {"model": messagemodel.Message,
                "description": "No Entries found"},
@@ -38,7 +38,7 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
 
 @router.get(
     "/v1/country/",
-    response_model=Dict[str, airportmodel.Airport],
+    response_model=List[airportmodel.Airport],
     responses={
          404: {"model": messagemodel.Message,
                "description": "No Entries found"},
@@ -65,7 +65,7 @@ def get_country_airports(country_name: str = Query(..., min_length=1,
 
 @router.get(
     "/v1/city/",
-    response_model=Dict[str, airportmodel.Airport],
+    response_model=List[airportmodel.Airport],
     responses={
          404: {"model": messagemodel.Message,
                "description": "No Entries found"},
@@ -92,7 +92,7 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
 
 @router.get(
     "/v1/IATA/",
-    response_model=Dict[str, airportmodel.Airport],
+    response_model=List[airportmodel.Airport],
     responses={
          404: {"model": messagemodel.Message,
                "description": "No Entries found"},
@@ -119,7 +119,7 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
 
 @router.get(
     "/v1/ICAO/",
-    response_model=Dict[str, airportmodel.Airport],
+    response_model=List[airportmodel.Airport],
     responses={
          404: {"model": messagemodel.Message,
                "description": "No Entries found"},
@@ -147,7 +147,7 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
 
 @router.get(
     "/v1/tzformat/",
-    response_model=Dict[str, airportmodel.Airport],
+    response_model=List[airportmodel.Airport],
     responses={
          404: {"model": messagemodel.Message,
                "description": "No Entries found"},
@@ -175,7 +175,7 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
 
 @router.get(
     "/v1/dst/",
-    response_model=Dict[str, airportmodel.Airport],
+    response_model=List[airportmodel.Airport],
     responses={
          404: {"model": messagemodel.Message,
                "description": "No Entries found"},
@@ -205,7 +205,7 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
 
 @router.get(
     "/v1/utc/",
-    response_model=Dict[str, airportmodel.Airport],
+    response_model=List[airportmodel.Airport],
     responses={
          404: {"model": messagemodel.Message,
                "description": "No Entries found"},
@@ -239,7 +239,7 @@ def get_utc_airports(time_zone: str = Query(...,
 
 @router.get(
     "/v1/geobox/",
-    response_model=Dict[str, airportmodel.Airport],
+    response_model=List[airportmodel.Airport],
     responses={
          404: {"model": messagemodel.Message,
                "description": "No Entries found"},
