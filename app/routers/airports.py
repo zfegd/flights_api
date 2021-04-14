@@ -455,8 +455,6 @@ def get_airport_in_geobox_naive(southlat: float = Query(..., ge=-90, le=90),
     Find the airports that falls within a specific geographical bound, as
      specified by Longitudinal and Latitudinal values
     """
-    if southlat > northlat or westlon > eastlon:
-        raise HTTPException(status_code=422, detail="Range not valid")
     try:
         mydb = database_handler.open_connection()
     except mysql.connector.Error:
@@ -467,10 +465,7 @@ def get_airport_in_geobox_naive(southlat: float = Query(..., ge=-90, le=90),
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Database Error")
-    query = "SELECT * FROM Airports WHERE latitude BETWEEN " + str(southlat)
-    query2 = " AND " + str(northlat) + " AND longitude BETWEEN " + str(westlon)
-    query3 = " AND " + str(eastlon)
-    querytotal = query + query2 + query3
+    querytotal = get_airport_geobox_query(southlat, northlat, westlon, eastlon)
     try:
         mycursor.execute(querytotal)
         myresult = mycursor.fetchall()
@@ -489,9 +484,27 @@ def get_airport_in_geobox_naive(southlat: float = Query(..., ge=-90, le=90),
     return results
 
 
-# def get_nearest_airports(numtoget, airportid):
-# return None
-
-
-# def get_airports_within_distance(airportid, distance):
-# return None
+def get_airport_geobox_query(southlat, northlat, westlon, eastlon):
+    if southlat <= northlat and westlon <= eastlon:
+        q1 = "SELECT * FROM Airports WHERE latitude BETWEEN " + str(southlat)
+        q2 = " AND " + str(northlat) + " AND longitude BETWEEN " + str(westlon)
+        q3 = " AND " + str(eastlon)
+        querytotal = q1 + q2 + q3
+        return querytotal
+    elif southlat <= northlat and westlon > eastlon:
+        q1 = "SELECT * FROM Airports WHERE latitude BETWEEN " + str(southlat)
+        q2 = " AND " + str(northlat) + " AND (longitude > "
+        q3 = str(westlon) + " OR longitude < " + str(eastlon) + ")"
+        querytotal = q1 + q2 + q3
+        return querytotal
+    elif southlat > northlat and westlon <= eastlon:
+        q1 = "SELECT * FROM Airports WHERE (latitude > " + str(southlat)
+        q2 = " OR latitude < " + str(northlat) + ") AND longitude"
+        q3 = " BETWEEN " + str(westlon) + " AND " + str(eastlon)
+        querytotal = q1 + q2 + q3
+        return querytotal
+    q1 = "SELECT * FROM Airports WHERE (latitude > " + str(southlat)
+    q2 = " OR latitude < " + str(northlat) + ") AND (longitude > "
+    q3 = str(westlon) + " OR longitude < " + str(eastlon) + ")"
+    querytotal = q1 + q2 + q3
+    return querytotal

@@ -486,22 +486,22 @@ def test_entire_region():
     assert response.status_code == 200
 
 
-def test_get_geobox_invalid_range_1():
+def test_get_geobox_cross_range_1():
     url = "/v1/geobox/?southlat=40&northlat=20&westlon=-180&eastlon=180"
     response = client.get(url)
-    assert response.status_code == 422
+    assert response.status_code == 200
 
 
-def test_get_geobox_invalid_range_2():
+def test_get_geobox_cross_range_2():
     url = "/v1/geobox/?southlat=-90&northlat=90&westlon=20&eastlon=0"
     response = client.get(url)
-    assert response.status_code == 422
+    assert response.status_code == 200
 
 
-def test_get_geobox_invalid_range_3():
+def test_get_geobox_cross_range_3():
     url = "/v1/geobox/?southlat=20&northlat=-20&westlon=-40&eastlon=-60"
     response = client.get(url)
-    assert response.status_code == 422
+    assert response.status_code == 200
 
 
 def test_get_geobox_str():
@@ -514,3 +514,9 @@ def test_get_geobox_sql_inj():
     url = "/v1/geobox/?southlat=0&northlat=0&westlon=0&eastlon=0%20OR1=1"
     response = client.get(url)
     assert response.status_code == 422
+
+
+def test_get_geobox_empty():
+    url = "/v1/geobox/?southlat=20&northlat=20&westlon=0&eastlon=0"
+    response = client.get(url)
+    assert response.status_code == 404
