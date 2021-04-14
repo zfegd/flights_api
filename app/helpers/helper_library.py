@@ -3,9 +3,7 @@ from models import airportmodel
 
 
 def airports_zip_to_dict(values):
-    keys = ["airportid", "name", "city", "country", "iata", "icao",
-            "latitude", "longitude", "altitude", "timezone", "dst", "tz",
-            "type", "source"]
+    keys = airportmodel.get_fields()
     if len(values) != len(keys):
         return None
     return dict(zip(keys, values))

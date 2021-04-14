@@ -18,18 +18,8 @@ class Airport(BaseModel):
     type: str
     source: str
 
-    # def __init__(self, fields):
-    #     self.airportid = fields[0]
-    #     self.name = fields[1]
-    #     self.city = fields[2]
-    #     self.country = fields[3]
-    #     self.iata = fields[4]
-    #     self.icao = fields[5]
-    #     self.latitude = fields[6]
-    #     self.longitude = fields[7]
-    #     self.altitude = fields[8]
-    #     self.timezone = fields[9]
-    #     self.dst = fields[10]
-    #     self.tz = fields[11]
-    #     self.type = fields[12]
-    #     self.source = fields[13]
+
+def get_fields():
+    return ["airportid", "name", "city", "country", "iata", "icao",
+            "latitude", "longitude", "altitude", "timezone", "dst", "tz",
+            "type", "source"]
