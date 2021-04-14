@@ -1,4 +1,4 @@
-examplecontent = {
+airportexamplecontent = {
     "application/json": {
         "example": {
             "502": {
