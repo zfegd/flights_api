@@ -68,14 +68,7 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    results = {}
-    index = 0
-    if len(myresult) == 0:
-        raise HTTPException(status_code=404, detail="No Entries found")
-    for result in myresult:
-        dictresult = helper_library.airports_zip_to_dict(result)
-        results.update({index: dictresult})
-        index = index + 1
+    results = helper_library.result_parser(myresult)
     mycursor.close()
     return results
 
@@ -117,14 +110,7 @@ def get_country_airports(country_name: str = Query(..., min_length=1,
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    results = {}
-    index = 0
-    if len(myresult) == 0:
-        raise HTTPException(status_code=404, detail="No Entries found")
-    for result in myresult:
-        dictresult = helper_library.airports_zip_to_dict(result)
-        results.update({index: dictresult})
-        index = index + 1
+    results = helper_library.result_parser(myresult)
     mycursor.close()
     return results
 
@@ -166,14 +152,7 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    results = {}
-    index = 0
-    if len(myresult) == 0:
-        raise HTTPException(status_code=404, detail="No Entries found")
-    for result in myresult:
-        dictresult = helper_library.airports_zip_to_dict(result)
-        results.update({index: dictresult})
-        index = index + 1
+    results = helper_library.result_parser(myresult)
     mycursor.close()
     return results
 
@@ -215,14 +194,7 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    results = {}
-    index = 0
-    if len(myresult) == 0:
-        raise HTTPException(status_code=404, detail="No Entries found")
-    for result in myresult:
-        dictresult = helper_library.airports_zip_to_dict(result)
-        results.update({index: dictresult})
-        index = index + 1
+    results = helper_library.result_parser(myresult)
     mycursor.close()
     return results
 
@@ -265,14 +237,7 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    results = {}
-    index = 0
-    if len(myresult) == 0:
-        raise HTTPException(status_code=404, detail="No Entries found")
-    for result in myresult:
-        dictresult = helper_library.airports_zip_to_dict(result)
-        results.update({index: dictresult})
-        index = index + 1
+    results = helper_library.result_parser(myresult)
     mycursor.close()
     return results
 
@@ -315,14 +280,7 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    results = {}
-    index = 0
-    if len(myresult) == 0:
-        raise HTTPException(status_code=404, detail="No Entries found")
-    for result in myresult:
-        dictresult = helper_library.airports_zip_to_dict(result)
-        results.update({index: dictresult})
-        index = index + 1
+    results = helper_library.result_parser(myresult)
     mycursor.close()
     return results
 
@@ -367,15 +325,7 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    results = {}
-    index = 0
-    if len(myresult) == 0:
-        # should never enter this branch?
-        raise HTTPException(status_code=404, detail="No Entries found")
-    for result in myresult:
-        dictresult = helper_library.airports_zip_to_dict(result)
-        results.update({index: dictresult})
-        index = index + 1
+    results = helper_library.result_parser(myresult)
     mycursor.close()
     return results
 
@@ -423,15 +373,8 @@ def get_utc_airports(time_zone: str = Query(...,
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    results = {}
-    index = 0
-    if len(myresult) == 0:
-        raise HTTPException(status_code=404,
-                            detail="No Entries found or timezone not valid")
-    for result in myresult:
-        dictresult = helper_library.airports_zip_to_dict(result)
-        results.update({index: dictresult})
-        index = index + 1
+    errmsg = "No Entries found or Timezone not valid"
+    results = helper_library.result_parser(myresult, errmsg)
     mycursor.close()
     return results
 
@@ -472,14 +415,7 @@ def get_airport_in_geobox_naive(southlat: float = Query(..., ge=-90, le=90),
     except mysql.connector.Error:
         raise HTTPException(status_code=500,
                             detail="Query to database failed!")
-    results = {}
-    index = 0
-    if len(myresult) == 0:
-        raise HTTPException(status_code=404, detail="No Entries found")
-    for result in myresult:
-        dictresult = helper_library.airports_zip_to_dict(result)
-        results.update({index: dictresult})
-        index = index + 1
+    results = helper_library.result_parser(myresult)
     mycursor.close()
     return results
 
