@@ -1,40 +1,19 @@
 from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel
-from typing import Dict, Optional
+from typing import Dict
 import re
-import mysql.connector
 from admin import database_handler
 from helpers import descriptors, helper_library
+from models import airportmodel, messagemodel
 
 router = APIRouter()
 
 
-class Airport(BaseModel):
-    airportid: int
-    name: str
-    city: str
-    country: str
-    iata: Optional[str] = None
-    icao: Optional[str] = None
-    latitude: float
-    longitude: float
-    altitude: int
-    timezone: Optional[str] = None
-    dst: Optional[str] = None
-    tz: Optional[str] = None
-    type: str
-    source: str
-
-
-class Message(BaseModel):
-    message: str
-
-
 @router.get(
     "/v1/airport",
-    response_model=Dict[str, Airport],
+    response_model=Dict[str, airportmodel.Airport],
     responses={
-         404: {"model": Message, "description": "No Entries found"},
+         404: {"model": messagemodel.Message,
+               "description": "No Entries found"},
          200: {
             "description": "Airports found containing requested name",
             "content": descriptors.airportexamplecontent,
@@ -59,9 +38,10 @@ def get_airport_details(airport_name: str = Query(..., min_length=1,
 
 @router.get(
     "/v1/country/",
-    response_model=Dict[str, Airport],
+    response_model=Dict[str, airportmodel.Airport],
     responses={
-         404: {"model": Message, "description": "No Entries found"},
+         404: {"model": messagemodel.Message,
+               "description": "No Entries found"},
          200: {
             "description": "Airports found in the country requested",
             "content": descriptors.airportexamplecontent,
@@ -85,9 +65,10 @@ def get_country_airports(country_name: str = Query(..., min_length=1,
 
 @router.get(
     "/v1/city/",
-    response_model=Dict[str, Airport],
+    response_model=Dict[str, airportmodel.Airport],
     responses={
-         404: {"model": Message, "description": "No Entries found"},
+         404: {"model": messagemodel.Message,
+               "description": "No Entries found"},
          200: {
             "description": "Airports found in the city requested",
             "content": descriptors.airportexamplecontent,
@@ -111,9 +92,10 @@ def get_city_airports(city_name: str = Query(..., min_length=1,
 
 @router.get(
     "/v1/IATA/",
-    response_model=Dict[str, Airport],
+    response_model=Dict[str, airportmodel.Airport],
     responses={
-         404: {"model": Message, "description": "No Entries found"},
+         404: {"model": messagemodel.Message,
+               "description": "No Entries found"},
          200: {
             "description": "Airport with the IATA code requested",
             "content": descriptors.airportexamplecontent,
@@ -137,9 +119,10 @@ def get_iata_airport(iata_code: str = Query(..., regex="^[A-Z]{3}$",
 
 @router.get(
     "/v1/ICAO/",
-    response_model=Dict[str, Airport],
+    response_model=Dict[str, airportmodel.Airport],
     responses={
-         404: {"model": Message, "description": "No Entries found"},
+         404: {"model": messagemodel.Message,
+               "description": "No Entries found"},
          200: {
             "description": "Airport with the ICAO code requested",
             "content": descriptors.airportexamplecontent,
@@ -164,9 +147,10 @@ def get_icao_airport(icao_code: str = Query(..., regex="^[A-Z]{4}$",
 
 @router.get(
     "/v1/tzformat/",
-    response_model=Dict[str, Airport],
+    response_model=Dict[str, airportmodel.Airport],
     responses={
-         404: {"model": Message, "description": "No Entries found"},
+         404: {"model": messagemodel.Message,
+               "description": "No Entries found"},
          200: {
             "description": "Airports within this tz timezone",
             "content": descriptors.airportexamplecontent,
@@ -191,9 +175,10 @@ def get_tz_airports(tz: str = Query(..., regex="^[a-zA-Z0-9-+/_]+$",
 
 @router.get(
     "/v1/dst/",
-    response_model=Dict[str, Airport],
+    response_model=Dict[str, airportmodel.Airport],
     responses={
-         404: {"model": Message, "description": "No Entries found"},
+         404: {"model": messagemodel.Message,
+               "description": "No Entries found"},
          200: {
             "description": "Airports within a dst timezone",
             "content": descriptors.airportexamplecontent,
@@ -220,9 +205,10 @@ def get_dst_airports(dst: str = Query(..., regex="^[EASOZNU]{1}$",
 
 @router.get(
     "/v1/utc/",
-    response_model=Dict[str, Airport],
+    response_model=Dict[str, airportmodel.Airport],
     responses={
-         404: {"model": Message, "description": "No Entries found"},
+         404: {"model": messagemodel.Message,
+               "description": "No Entries found"},
          200: {
             "description": "Airports within this UTC offset range",
             "content": descriptors.airportexamplecontent,
@@ -253,9 +239,10 @@ def get_utc_airports(time_zone: str = Query(...,
 
 @router.get(
     "/v1/geobox/",
-    response_model=Dict[str, Airport],
+    response_model=Dict[str, airportmodel.Airport],
     responses={
-         404: {"model": Message, "description": "No Entries found"},
+         404: {"model": messagemodel.Message,
+               "description": "No Entries found"},
          200: {
             "description": "Airports within this area",
             "content": descriptors.airportexamplecontent,
