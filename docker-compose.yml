@@ -6,7 +6,6 @@ services:
     build: .
     ports:
       - "80:80"
-    container_name: "appcontainer"
     depends_on:
       - db
   db:
@@ -23,5 +22,4 @@ services:
       MYSQL_PASSWORD: ${SQLPASS}
     ports:
       - "3308:3306"
-    container_name: "openflightsdb"
     command: --secure-file-priv=''

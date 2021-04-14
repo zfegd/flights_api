@@ -6,7 +6,6 @@ services:
     build: .
     ports:
       - "80:80"
-    container_name: "appcontainer"
     depends_on:
       - db
   db:
@@ -23,7 +22,6 @@ services:
       MYSQL_PASSWORD: ${SQLPASS}
     ports:
       - "3308:3306"
-    container_name: "openflightsdb"
     command: --secure-file-priv=''
   loadtester:
     image : locustio/locust
@@ -31,7 +29,6 @@ services:
       - "8089:8089"
     depends_on:
       - app
-    container_name: "loadtestcontainer"
     volumes:
       - ./app:/mnt/locust
     command: -f /mnt/locust/locustfile.py --host=http://app:80
