@@ -6,7 +6,7 @@ def airports_zip_to_dict(values):
     keys = airportmodel.get_fields()
     if len(values) != len(keys):
         return None
-    return dict(zip(keys, values))
+    return airportmodel.Airport.parse_obj(dict(zip(keys, values)))
 
 
 def result_parser(myresult, detailmsg="No Entries found"):
