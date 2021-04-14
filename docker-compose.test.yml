@@ -1,7 +1,9 @@
 version: "3.8"
 services:
   app:
-    build: .
+    build:
+      context: .
+      target: test
     ports:
       - "80:80"
     depends_on:

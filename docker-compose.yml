@@ -3,7 +3,9 @@ volumes:
   db_info:
 services:
   app:
-    build: .
+    build:
+      context: .
+      target: base
     ports:
       - "80:80"
     depends_on:
