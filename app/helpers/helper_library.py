@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from models import airportmodel
 
 
-def airports_zip_to_dict(values):
+def parse_to_airport(values):
     keys = airportmodel.get_fields()
     if len(values) != len(keys):
         return None
@@ -14,6 +14,6 @@ def result_parser(myresult, detailmsg="No Entries found"):
     if len(myresult) == 0:
         raise HTTPException(status_code=404, detail=detailmsg)
     for result in myresult:
-        nextairport = airports_zip_to_dict(result)
+        nextairport = parse_to_airport(result)
         results = results + [nextairport]
     return results
