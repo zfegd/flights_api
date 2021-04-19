@@ -1,11 +1,13 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.security import OAuth2PasswordBearer
 from typing import List
 import re
 from admin import database_handler
 from helpers import descriptors, helper_library
 from models import airportmodel, messagemodel
 
-router = APIRouter()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+router = APIRouter(dependencies=[Depends(oauth2_scheme)])
 
 
 @router.get(
