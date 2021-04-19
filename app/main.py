@@ -14,4 +14,4 @@ app.include_router(airports.router)
 
 @app.get("/")
 def root():
-    return {"message": "Hello to the Landing Page!"}
+    return {"message": "Welcome to the Landing Page!"}
